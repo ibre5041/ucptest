@@ -1,0 +1,15 @@
+# ons parameters
+# OCI Connect string:
+# jdbc:oracle:thin:@(DESCRIPTION=(TRANSPORT_CONNECT_TIMEOUT=3)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=rhrac-scan)(PORT = 1521))(CONNECT_DATA =(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))
+#
+# JDBC URL:
+# jdbc:oracle:thin:@//rhrac-scan:1521/ACTEST
+url=jdbc:oracle:thin:@//rhrac-scan:1521/ACTEST
+
+username=ONSTEST
+password=onstest
+
+onsnodes=nodes=czcholsint846:6200,czcholsint847:6200
+
+# simplefan parameters
+oracle.ons.oraclehome=/opt/oracle/product/12.1.0

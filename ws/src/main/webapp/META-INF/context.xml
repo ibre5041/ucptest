@@ -1,0 +1,31 @@
+<Context>
+<!--  moved to $CATALINA_BASE/conf/context.xml (UPC starts own worker threads, preventing the application to re-deployed -->
+<!-- 
+ <Resource
+ name="jdbc/UCPPool"
+ auth="Container"
+ factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+ type="oracle.ucp.jdbc.PoolDataSource"
+ description="UCP JNDI Connection Pool for Application Continuity"
+ connectionFactoryClassName="oracle.jdbc.replay.OracleDataSourceImpl"
+ onsConfiguration="nodes=czcholsint846:6200,czcholsint847:6200"
+ initialPoolSize="10"
+ minPoolSize="10"
+ maxPoolSize="50"
+ inactiveConnectionTimeout="20"
+ user="onstest"
+ password="onstest"
+ url="jdbc:oracle:thin:@(DESCRIPTION =(TRANSPORT_CONNECT_TIMEOUT=3)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"  
+ connectionPoolName="UCPPool"
+ validateConnectionOnBorrow="true"
+ fastConnectionFailoverEnabled="true"
+ sqlForValidateConnection="select 1 from DUAL" />
+ -->
+ <!--  
+ url="jdbc:oracle:thin:@(DESCRIPTION = (TRANSPORT_CONNECT_TIMEOUT=3) (RETRY_COUNT=20)(FAILOVER=ON) 
+(ADDRESS = (PROTOCOL = TCP)(HOST = infra12db-scan)(PORT = 1521)) 
+(CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = ACTEST)))" 
+ 
+ url="jdbc:oracle:thin:@//infra12db-scan:1521/ACTEST"
+ --> 
+</Context>

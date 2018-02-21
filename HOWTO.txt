@@ -1,0 +1,45 @@
+1. Initial setup
+
+1.1 Install Tomcat 8.x
+1.1.1 Configure Tomcat deployment
+tomcat-users.xml
+  <role rolename="tomcat"/>
+  <role rolename="manager-gui"/>
+  <role rolename="manager-script"/>
+  <role rolename="manager-jmx"/>
+  <role rolename="manager-status"/>
+  <role rolename="admin-gui"/>
+  <role rolename="admin-script"/>
+  <user password="test" roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script" username="test"/>
+
+1.1.2 Configure Tomcat in Eclipse (add into Servers)
+
+1.2 Install maven
+1.2.1 Configure maven (maven.oracle.com)
+
+https://docs.oracle.com/middleware/1213/core/MAVEN/config_maven_repo.htm#MAVEN9015
+PS: i looks like the official maven repository contains only drivers of version 12.2.0.1 
+
+2. Setup sources
+2.1 Clone the repository
+ git clone https://github.com/ibre5041/ucptest.git
+
+2.2 Eclipse import existing maven project (including all sub-modules)
+2.2.2 Configure Web facet for ucptest-ws.
+ Properties -> Project Facets
+  Left: Dynamic Web Module (3.0)
+  Right: Runtimes -> Apache tomcat v8.5
+
+3. Compile&Run
+3.1 Compile
+
+mvn clean compile
+
+3.2 Deploy
+mvn tomcat7:redeploy -pl ws
+mvn package install -pl views
+mvn tomcat7:deploy -pl ws   (or mvn tomcat7:redeploy -pl ws)
+
+3.3 Run
+...
+
