@@ -25,8 +25,11 @@ PS: i looks like the official maven repository contains only drivers of version 
  git clone https://github.com/ibre5041/ucptest.git
 
 2.2 Eclipse import existing maven project (including all sub-modules)
+2.2.1 mvn eclipse:eclipse -Dwtpversion=2.0  -pl ws
+
 2.2.2 Configure Web facet for ucptest-ws.
  Properties -> Project Facets
+  Left: Java (Version 1.4 => 1.8)
   Left: Dynamic Web Module (3.0)
   Right: Runtimes -> Apache tomcat v8.5
 

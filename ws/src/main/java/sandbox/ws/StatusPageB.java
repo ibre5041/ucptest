@@ -5,7 +5,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -17,10 +18,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import oracle.jdbc.OracleDriver;
+import oracle.ucp.UniversalConnectionPool;
+import oracle.ucp.UniversalConnectionPoolException;
+import oracle.ucp.UniversalConnectionPoolLifeCycleState;
+import oracle.ucp.admin.UniversalConnectionPoolManager;
+import oracle.ucp.admin.UniversalConnectionPoolManagerImpl;
 import oracle.ucp.jdbc.PoolDataSource;
+import oracle.ucp.jdbc.PoolDataSourceFactory;
 
-@WebServlet("/statusPage")
-public class StatusPage extends HttpServlet {
+/*************************************************************
+ * 
+ * Copy ws/src/main/resources/context.xml.tmpl as into  ${CATALINA_BASE}/conf/context.xml.tmpl
+ *
+ * Set Tomcat properties:
+ * 
+ * create file ${CATALINA_BASE}/bin/setenv.{sh,bat}, oracle.ucp.jdbc.xmlConfigFile should point into FileURI ucp.xml
+ *  
+ * CATALINA_OPTS="-Doracle.ucp.jdbc.xmlConfigFile=file:/"`cygpath -am ${CATALINA_BASE}/conf/ucp.xml`
+ * or
+ * CATALINA_OPTS="-Doracle.ucp.jdbc.xmlConfigFile=file:/${CATALINA_BASE}/conf/ucp.xml"
+ */
+
+@WebServlet("/statusPageB")
+public class StatusPageB extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -39,18 +61,29 @@ public class StatusPage extends HttpServlet {
 
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-
-		out.print("<HTML><HEAD><TITLE> " + "Print UCP Status" + " </TITLE></HEAD><BODY>");
-				
-		try {
-			Context ctx = new InitialContext();
-			Context envContext = (Context) ctx.lookup("java:/comp/env");
-
-			// Look up a data source
-			javax.sql.DataSource ds =(javax.sql.DataSource)envContext.lookup("jdbc/UCPPool");
-			PoolDataSource pds = (PoolDataSource) ds;
 						
-			out.println("<PRE>");
+		try {
+			out.print("<HTML><HEAD><TITLE> " + "Print UCP Status" + " </TITLE></HEAD><BODY><PRE>");
+	        
+			// Look up a data source
+			PoolDataSource pds = PoolDataSourceFactory.getPoolDataSource("UCPPoolFromUcpXmlA");
+	        {
+	        	String file = System.getProperty("oracle.ucp.jdbc.xmlConfigFile");
+	        	UniversalConnectionPoolManager mgr = UniversalConnectionPoolManagerImpl.getUniversalConnectionPoolManager();
+
+	        	mgr.setLogLevel(Level.FINE);
+	        	Logger.getLogger("oracle.ucp").setLevel(Level.FINEST);
+	        	Logger.getLogger("oracle.ucp.jdbc.PoolDataSource").setLevel(Level.FINEST);
+
+	        	String[] pools = mgr.getConnectionPoolNames();
+
+	        	UniversalConnectionPool pool = mgr.getConnectionPool("UCPPOOL");
+	        	UniversalConnectionPoolLifeCycleState state = pool.getLifeCycleState();
+	        	//mgr.startConnectionPool("UCPPoolA");
+	        	// Get the datasource instance, named as "UCPPoolA1" in xml config file ${CATALINA_BASE}/conf/ucp.xml
+	        	PoolDataSource pdsb = PoolDataSourceFactory.getPoolDataSource("UCPPoolFromUcpXmlB");
+	        }
+
 			out.println("ConnectionFactoryClassName:" + pds.getConnectionFactoryClassName());
 			out.println("Driver version: " + OracleDriver.getDriverVersion());
 			out.println("\tbuild date: " + OracleDriver.getBuildDate());
@@ -76,11 +109,11 @@ public class StatusPage extends HttpServlet {
 			out.println("SecondsToTrustIdleConnection: " + pds.getSecondsToTrustIdleConnection());
 			out.println("FailoverEnabled: " + pds.getFastConnectionFailoverEnabled());
 			
-//			oracle.ucp.jdbc.JDBCConnectionPoolStatistics stats = pds.getStatistics();
-//			out.println("\tgetAvailableConnectionsCount() " + stats.getAvailableConnectionsCount());
-//			out.println("\tgetBorrowedConnectionsCount() " + stats.getBorrowedConnectionsCount() );
-//			out.println("\tgetRemainingPoolCapacityCount() " + stats.getRemainingPoolCapacityCount());
-//			out.println("\tgetTotalConnectionsCount() " + stats.getTotalConnectionsCount());
+			oracle.ucp.jdbc.JDBCConnectionPoolStatistics stats = pds.getStatistics();
+			out.println("\tgetAvailableConnectionsCount() " + stats.getAvailableConnectionsCount());
+			out.println("\tgetBorrowedConnectionsCount() " + stats.getBorrowedConnectionsCount() );
+			out.println("\tgetRemainingPoolCapacityCount() " + stats.getRemainingPoolCapacityCount());
+			out.println("\tgetTotalConnectionsCount() " + stats.getTotalConnectionsCount());
 
 			//out.println(((oracle.ucp.jdbc.oracle.OracleJDBCConnectionPoolStatistics)pds.getStatistics()).get-FCFProcessingInfo());
 			//out.println(((oracle.ucp.jdbc.oracle.OracleJDBCConnectionPoolStatistics)pds.getStatistics()).getFCFProcessingInfoProcessedOnly());			
@@ -94,25 +127,19 @@ public class StatusPage extends HttpServlet {
 		        } else {
 		        	out.println("ReplayableConnection: false");
 		        }
+		        
+		        out.println("Autocommit: " + String.valueOf(conn.getAutoCommit()));		        
 			}
 			
 			out.println("</PRE>");
 
-		} catch (NamingException e) {
-			out.println("NamingException in StatusPage");
-			for(StackTraceElement ste : e.getStackTrace())
-				out.println(ste.toString());
-		} catch (SQLException e) {
-			out.println("SQLException in StatusPage");
-			for(StackTraceElement ste : e.getStackTrace())
-				out.println(ste.toString());
-			throw new ServletException(this.getClass()	.getSimpleName(), e);
-		} catch (NullPointerException e) {
-			out.println("NullPointerException in StatusPage");
-			for(StackTraceElement ste : e.getStackTrace())
-				out.println(ste.toString());			
+		} catch (UniversalConnectionPoolException | NullPointerException | SQLException e) {
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));		
+			out.println(errors.toString());
+			throw new ServletException(this.getClass().getSimpleName(), e);
+		} finally {
+			out.print("</PRE></BODY></HTML>");
 		}
-		
-		out.print("</BODY></HTML>");
 	}
 }

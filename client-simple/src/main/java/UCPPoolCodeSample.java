@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import oracle.ucp.admin.UniversalConnectionPoolManager;
+import oracle.ucp.admin.UniversalConnectionPoolManagerImpl;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
@@ -20,11 +22,11 @@ public class UCPPoolCodeSample {
 		// Java system property to specify the location of UCP XML configuration
 		// file which has shared pool, datasource properties defined in it.
 		System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
-
+		
 		// Get the datasource instance named as "UCPPoolA1" in XML config file ucp.xml
 		PoolDataSource ds1 = PoolDataSourceFactory.getPoolDataSource("UCPPoolA1");
 
-		// Get a connection datasource
+		// Get a connection from datasource
 		try(Connection conn1 = ds1.getConnection()) {
 
 			// Run a query on the connection
@@ -37,7 +39,7 @@ public class UCPPoolCodeSample {
 		// Get the datasource
 		PoolDataSource ds2 = PoolDataSourceFactory.getPoolDataSource("UCPPoolA2");
 
-		// Get a connection using tenant2 datasource
+		// Get a connection from datasource
 		try(Connection conn2 = ds2.getConnection()) {
 
 			// Run a query on the connection obtained using tenant2 datasource i.e.

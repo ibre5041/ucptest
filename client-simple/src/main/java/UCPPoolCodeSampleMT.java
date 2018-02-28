@@ -25,9 +25,9 @@ public class UCPPoolCodeSampleMT {
 				String sql = "SELECT ID, NAME, AUTHOR FROM BOOK WHERE ROWNUM < 10";
 				try(Statement st = conn.createStatement()) {
 					try(ResultSet rs = st.executeQuery(sql)) {
-						System.out.println("Books Details:");
+						//System.out.println("Books Details:");
 						while (rs.next()) {
-							System.out.println("ID = " + rs.getLong("ID") + "     NAME = " + rs.getString("NAME"));
+							//System.out.println("ID = " + rs.getLong("ID") + "     NAME = " + rs.getString("NAME"));
 						}
 						rs.close();
 					}
@@ -44,12 +44,12 @@ public class UCPPoolCodeSampleMT {
 
 			// Get a connection from datasource
 			try(Connection conn = pool.getConnection()) {
-				for(int i = 4; i > 0; i--) {
+				for(int i = 10; i > 0; i--) {
 					// Run a query on the connection
 					runQuery(conn);
-					System.out.println("Thread: " + threadName + ", " + i);
+					//System.out.println("Thread: " + threadName + ", " + i);
 					// Let the thread sleep for a while.
-					Thread.sleep(50);					
+					Thread.sleep(500);					
 				}
 				
 				// return connection to the pool
@@ -82,10 +82,16 @@ public class UCPPoolCodeSampleMT {
 		PoolDataSource ds = PoolDataSourceFactory.getPoolDataSource("UCPPoolA1");
 		
 		// Start N parallel working threads - where N is close to pool size
-		for (int i = 1; i < ds.getMaxPoolSize() - 5; i++)
+		for (int i = 1; i <= ds.getMaxPoolSize() - 5; i++)
 		{
 			RunnableThread R1 = new RunnableThread("Thread-"+i, ds);
 			R1.start();
+		}
+		
+		for (int i = 0; i < 10; i++)
+		{
+			System.out.println("Borrowed connections: " + ds.getStatistics().getBorrowedConnectionsCount() + "\n");
+			Thread.sleep(1000);
 		}
 	}   
 }

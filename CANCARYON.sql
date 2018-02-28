@@ -13,7 +13,30 @@ grant select on sys.v_$instance to "ONSTEST"
 grant execute on sys.dbms_lock to "ONSTEST"
 /
 
-drop table "ONSTEST"."ACDEMOTAB"
+grant select_catalog_role to "ONSTEST"
+/
+
+drop table "ONSTEST"."BOOK"
+/
+
+create table "ONSTEST"."BOOK"
+(
+	id number,
+	name varchar2(128),
+	author varchar2(128),
+	CONSTRAINT BOOKS_PK PRIMARY KEY (id)
+)
+/
+
+create sequence book_id_seq start with 10 increment by 10
+/
+
+create or replace trigger book_id_trig  before insert ON "ONSTEST"."BOOK"
+FOR EACH ROW
+WHEN (new.ID IS NULL)
+BEGIN
+  :NEW.ID := book_id_seq.NEXTVAL;
+END book_id_trig;
 /
 
 create table "ONSTEST"."ACDEMOTAB"
@@ -21,6 +44,12 @@ create table "ONSTEST"."ACDEMOTAB"
 	message varchar2(128),
 	inst_id number	
 )
+/
+
+create index "ONSTEST"."BOOK_IX1" on "ONSTEST"."BOOK"(upper(name))
+/
+
+drop table "ONSTEST"."ACDEMOTAB"
 /
 
 CREATE OR REPLACE PROCEDURE "ONSTEST"."CANICARRYON" (pi_message varchar2)
