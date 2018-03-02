@@ -1,5 +1,6 @@
 package sandbox.utils;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,7 +80,7 @@ public class BookSimpleDao {
 
 	public Book save(Book book)
 	{
-		return book.getId() > 0 ? update(book) : create(book);
+		return book.getId().compareTo(BigDecimal.ZERO) > 0 ? update(book) : create(book);
 	} 
 
 	public sandbox.pojo.Book create(Book book) {
@@ -93,7 +94,7 @@ public class BookSimpleDao {
 			ps.executeUpdate();
 			try (ResultSet rs = ps.getGeneratedKeys()) {
 				rs.next();
-				int id = rs.getInt(1);
+				BigDecimal id = rs.getBigDecimal(1);
 				book.setId(id);
 			}
 			conn.commit();
@@ -113,6 +114,7 @@ public class BookSimpleDao {
 			try (PreparedStatement ps = conn.prepareStatement(sql)) {
 				ps.setString(1, book.getName());
 				ps.setString(2, book.getAuthor());
+				ps.setBigDecimal(3, book.getId());
 				ps.executeUpdate();
 			}
 			conn.commit();
@@ -142,7 +144,7 @@ public class BookSimpleDao {
 
 	protected Book processRow(ResultSet rs) throws SQLException {
 		Book book = new Book();
-		book.setId(rs.getInt("id"));
+		book.setId(rs.getBigDecimal("id"));
 		book.setName(rs.getString("name"));
 		book.setAuthor(rs.getString("author"));
 		return book;
