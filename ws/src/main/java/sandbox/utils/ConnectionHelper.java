@@ -1,5 +1,7 @@
 package sandbox.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.InetAddress;
 import java.sql.Connection;
 
@@ -15,10 +17,11 @@ public class ConnectionHelper {
 			Context ctx = new InitialContext();
 			Context envContext = (Context) ctx.lookup("java:/comp/env");
 
-			m_pds = (PoolDataSource) envContext.lookup ("jdbc/UCPPoolFromContextXml");		
-			m_pds.registerConnectionLabelingCallback(new BooksConnectionLabelingCallback());
+			m_pds = (PoolDataSource) envContext.lookup ("jdbc/UCPPoolFromContextXmlA");
+			//m_pds.registerConnectionLabelingCallback(new BooksConnectionLabelingCallback());
 		} catch (Exception e) {
-			
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -32,12 +35,12 @@ public class ConnectionHelper {
 	PoolDataSource m_pds;	
 	
 	public Connection getConnection()  throws Exception {
-		java.util.Properties props = new java.util.Properties();
-		props.put("v$session.osuser", System.getProperty("user.name").toString());
-		props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
-		props.put("v$session.program", "My Program Name");
-
-		Connection connection = m_pds.getConnection(props);
+//		java.util.Properties props = new java.util.Properties();
+//		props.put("v$session.osuser", System.getProperty("user.name").toString());
+//		props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
+//		props.put("v$session.program", "My Program Name");
+//		Connection connection = m_pds.getConnection(props);
+		Connection connection = m_pds.getConnection();
 		connection.setAutoCommit(false);
 		return connection;
 	}

@@ -28,15 +28,44 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /*************************************************************
  * 
+ * Adopted from:
+ * https://blogs.oracle.com/dev2dev/using-ucp-multi-tenant-shared-pool-feature-with-tomcat
+ * 
  * Copy ws/src/main/resources/context.xml.tmpl as into  ${CATALINA_BASE}/conf/context.xml.tmpl
  *
  * Set Tomcat properties:
  * 
+ * 1.
  * create file ${CATALINA_BASE}/bin/setenv.{sh,bat}, oracle.ucp.jdbc.xmlConfigFile should point into FileURI ucp.xml
  *  
  * CATALINA_OPTS="-Doracle.ucp.jdbc.xmlConfigFile=file:/"`cygpath -am ${CATALINA_BASE}/conf/ucp.xml`
  * or
  * CATALINA_OPTS="-Doracle.ucp.jdbc.xmlConfigFile=file:/${CATALINA_BASE}/conf/ucp.xml"
+ * 
+ * 2. For each datasource in ucp.xml create global JNDI resource (*having* dataSourceFromConfiguration property).
+ * This tell UCP, that all the datasource's parameters should be read from ucp.xml
+ * Amend ${CATALINA_BASE}/conf/server.xml
+ * <GlobalNamingResources>
+ *     <Resource auth="Container"
+ *            dataSourceFromConfiguration="UCPPoolFromUcpXmlA"
+ *            factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+ *            global="jdbc/UCPPoolFromContextXmlA"
+ *            name="jdbc/UCPPoolFromContextXmlA"
+ *            type="oracle.ucp.jdbc.PoolDataSource"
+ *           />
+ *           
+ * 3. Link global Resource with application
+ * In context.xml add mapping:
+ * <ResourceLink auth="Container" global="jdbc/UCPPoolFromContextXmlA" name="jdbc/UCPPoolFromContextXmlA" type="javax.sql.DataSource"/>
+ * 
+ * Access datasource either via JNDI lookup (StatusPageA.java):
+ * PoolDataSource pds =(PoolDataSource)envContext.lookup("jdbc/UCPPoolFromContextXmlA");
+ * 
+ * or directly from pool manager class (StatusPageB.java):
+ * PoolDataSource pds = PoolDataSourceFactory.getPoolDataSource("UCPPoolFromUcpXmlA");
+ * 
+ * PS: possibly also make changes in Eclipse workspace directory:
+ * workspace/Servers/Tomcat v9.0 Server at localhost-config/context.xml
  */
 
 @WebServlet("/statusPageB")
@@ -84,6 +113,7 @@ public class StatusPageB extends HttpServlet {
 	        	PoolDataSource pdsb = PoolDataSourceFactory.getPoolDataSource("UCPPoolFromUcpXmlB");
 	        }
 
+			out.println("PoolDataSource id:" + System.identityHashCode(pds));
 			out.println("ConnectionFactoryClassName:" + pds.getConnectionFactoryClassName());
 			out.println("Driver version: " + OracleDriver.getDriverVersion());
 			out.println("\tbuild date: " + OracleDriver.getBuildDate());

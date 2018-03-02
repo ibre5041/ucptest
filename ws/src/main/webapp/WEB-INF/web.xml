@@ -15,4 +15,7 @@ see implementation details http://jersey.java.net/nonav/documentation/latest/jax
     <servlet-name>Jersey Web Application</servlet-name>
     <url-pattern>/webapi/*</url-pattern>
   </servlet-mapping>
+  
+  <ResourceLink auth="Container" global="jdbc/UCPPoolFromContextXml" name="ucpDS1" type="javax.sql.DataSource"/>
+  <resourcelink auth="Container" global="jdbc/UCPPoolFromContextXml" name="ucpDS1" type="javax.sql.DataSource"/>
 </web-app>

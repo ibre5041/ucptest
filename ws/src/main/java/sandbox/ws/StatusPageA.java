@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import oracle.jdbc.OracleDriver;
 import oracle.ucp.UniversalConnectionPool;
@@ -28,8 +29,44 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /*************************************************************
  * 
+ * Adopted from:
+ * https://blogs.oracle.com/dev2dev/using-ucp-multi-tenant-shared-pool-feature-with-tomcat
+ * 
  * Copy ws/src/main/resources/context.xml.tmpl as into  ${CATALINA_BASE}/conf/context.xml.tmpl
  *
+ * Set Tomcat properties:
+ * 
+ * 1.
+ * create file ${CATALINA_BASE}/bin/setenv.{sh,bat}, oracle.ucp.jdbc.xmlConfigFile should point into FileURI ucp.xml
+ *  
+ * CATALINA_OPTS="-Doracle.ucp.jdbc.xmlConfigFile=file:/"`cygpath -am ${CATALINA_BASE}/conf/ucp.xml`
+ * or
+ * CATALINA_OPTS="-Doracle.ucp.jdbc.xmlConfigFile=file:/${CATALINA_BASE}/conf/ucp.xml"
+ * 
+ * 2. For each datasource in ucp.xml create global JNDI resource (*having* dataSourceFromConfiguration property).
+ * This tell UCP, that all the datasource's parameters should be read from ucp.xml
+ * Amend ${CATALINA_BASE}/conf/server.xml
+ * <GlobalNamingResources>
+ *     <Resource auth="Container"
+ *            dataSourceFromConfiguration="UCPPoolFromUcpXmlA"
+ *            factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+ *            global="jdbc/UCPPoolFromContextXmlA"
+ *            name="jdbc/UCPPoolFromContextXmlA"
+ *            type="oracle.ucp.jdbc.PoolDataSource"
+ *           />
+ *           
+ * 3. Link global Resource with application
+ * In context.xml add mapping:
+ * <ResourceLink auth="Container" global="jdbc/UCPPoolFromContextXmlA" name="jdbc/UCPPoolFromContextXmlA" type="javax.sql.DataSource"/>
+ * 
+ * Access datasource either via JNDI lookup (StatusPageA.java):
+ * PoolDataSource pds =(PoolDataSource)envContext.lookup("jdbc/UCPPoolFromContextXmlA");
+ * 
+ * or directly from pool manager class (StatusPageB.java):
+ * PoolDataSource pds = PoolDataSourceFactory.getPoolDataSource("UCPPoolFromUcpXmlA");
+ * 
+ * PS: possibly also make changes in Eclipse workspace directory:
+ * workspace/Servers/Tomcat v9.0 Server at localhost-config/context.xml
  */
 
 @WebServlet("/statusPageA")
@@ -61,27 +98,10 @@ public class StatusPageA extends HttpServlet {
 			Context envContext = (Context) ctx.lookup("java:/comp/env");
 	        
 			// Look up a data source
-			javax.sql.DataSource ds =(javax.sql.DataSource)envContext.lookup("jdbc/UCPPoolFromContextXml");
-			PoolDataSource pds = (PoolDataSource) ds;
+			DataSource ds =(DataSource)envContext.lookup("jdbc/UCPPoolFromContextXmlA");
+			PoolDataSource pds = (PoolDataSource)ds;
 
-//	        {
-//	        	String file = System.getProperty("oracle.ucp.jdbc.xmlConfigFile");
-//	        	UniversalConnectionPoolManager mgr = UniversalConnectionPoolManagerImpl.getUniversalConnectionPoolManager();
-//
-//	        	mgr.setLogLevel(Level.FINE);
-//	        	Logger.getLogger("oracle.ucp").setLevel(Level.FINEST);
-//	        	Logger.getLogger("oracle.ucp.jdbc.PoolDataSource").setLevel(Level.FINEST);
-//
-//	        	String[] pools = mgr.getConnectionPoolNames();
-//
-//	        	UniversalConnectionPool pool = mgr.getConnectionPool("UCPPoolA");
-//	        	UniversalConnectionPoolLifeCycleState state = pool.getLifeCycleState();
-//	        	//mgr.startConnectionPool("UCPPoolA");
-//	        	// Get the datasource instance, named as "UCPPoolA1" in xml config file ${CATALINA_BASE}/conf/SharedPool_config.xml
-//	        	PoolDataSource pds1 = PoolDataSourceFactory.getPoolDataSource("UCPPoolA1");
-//	        	Connection pds1Conn = pds1.getConnection();
-//	        }
-
+			out.println("PoolDataSource id:" + System.identityHashCode(pds));
 			out.println("ConnectionFactoryClassName:" + pds.getConnectionFactoryClassName());
 			out.println("Driver version: " + OracleDriver.getDriverVersion());
 			out.println("\tbuild date: " + OracleDriver.getBuildDate());

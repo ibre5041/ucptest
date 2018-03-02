@@ -8,7 +8,7 @@
  type="oracle.ucp.jdbc.PoolDataSource"
  description="UCP JNDI Connection Pool for Application Continuity"
  connectionFactoryClassName="oracle.jdbc.replay.OracleDataSourceImpl"
- onsConfiguration="nodes=czcholsint846:6200,czcholsint847:6200"
+ onsConfiguration="nodes=cz846:6200,cz847:6200"
  initialPoolSize="10"
  minPoolSize="10"
  maxPoolSize="50"
