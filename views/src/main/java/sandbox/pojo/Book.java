@@ -1,24 +1,23 @@
 package sandbox.pojo;
 
+import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author Christophe Coenraets
- */
 @XmlRootElement
 public class Book {
 
-    private int id;
+    private BigDecimal id;
 
     private String name;
 
     private String author;
 
-	public int getId() {
+	public BigDecimal getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(BigDecimal id) {
 		this.id = id;
 	}
 
@@ -41,16 +40,6 @@ public class Book {
 	@Override
 	public String toString() {
 		return "Book [id=" + id + ", name=" + name + ", author=" + author + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((author == null) ? 0 : author.hashCode());
-		result = prime * result + id;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
 	}
 
 	@Override
