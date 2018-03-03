@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<!-- Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved. -->
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.connection.provider_class">oracle.ucp.hibernate.sample.UCPConnectionProvider</property>
+    <property name="hibernate.ucp.url">jdbc:oracle:thin:@//host:1521/service_name</property>
+    <property name="hibernate.ucp.connectionFactoryClassName">oracle.jdbc.pool.OracleDataSource</property>
+    <property name="hibernate.ucp.user">scott</property>
+    <property name="hibernate.ucp.password">tiger</property>
+    <property name="hibernate.ucp.maxPoolSize">2</property>
+  </session-factory>
+</hibernate-configuration>

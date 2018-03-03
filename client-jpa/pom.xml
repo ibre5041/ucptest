@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.ibre5041</groupId>
+  <artifactId>ucptest-ws-jpa</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <parent>
+    <groupId>net.ibre5041</groupId>
+    <artifactId>ucptest-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <build>
+    <finalName>onsws-jpa</finalName>
+
+    <plugins>
+      <plugin>
+	<groupId>org.apache.tomcat.maven</groupId>
+	<artifactId>tomcat7-maven-plugin</artifactId>
+	<version>2.1</version>
+	<configuration>
+	  <url>http://localhost:8080/manager/text</url>
+	  <username>test</username>
+	  <password>test</password>
+	</configuration>
+      </plugin>
+
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>exec-maven-plugin</artifactId>
+	<version>1.6.0</version>
+	<configuration>
+	  <executable>java</executable>
+	  <classpathScope>compile</classpathScope>
+	  <addResourcesToClasspath>true</addResourcesToClasspath>
+	  <arguments>
+	    <argument>-classpath</argument>
+	    <classpath />
+	    <argument>App</argument>
+	  </arguments>
+	</configuration>
+      </plugin>
+      
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>net.ibre5041</groupId>
+      <artifactId>ucptest-views</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>      
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.oracle.jdbc</groupId>
+      <artifactId>ojdbc8</artifactId>
+      <version>${oracle.version}</version>
+      <scope>provided</scope>          
+    </dependency>
+
+    <dependency>
+      <groupId>com.oracle.jdbc</groupId>
+      <artifactId>ucp</artifactId>
+      <version>${oracle.version}</version>
+      <scope>provided</scope>		  
+    </dependency>
+    
+  </dependencies>
+</project>

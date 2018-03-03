@@ -12,6 +12,8 @@
     <tomcat.version>8.5.5</tomcat.version>
     <jersey2.version>2.26</jersey2.version>
     <jaxrs.version>2.1</jaxrs.version>
+    <hibernate.version>5.2.13.Final</hibernate.version>
+    
     <oracle.version>12.2.0.1</oracle.version>
 
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -20,10 +22,11 @@
   </properties>
 
   <modules>
-    <module>ws</module>    
-    <module>views</module>
+    <module>client-jpa</module>
     <module>client-simple</module>    
     <module>client</module>
+    <module>views</module>
+    <module>ws</module>
   </modules>
 
   <!-- <repositories> -->
@@ -60,6 +63,7 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+    
   </dependencies>
   
 </project>
