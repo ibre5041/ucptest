@@ -22,11 +22,12 @@
   </properties>
 
   <modules>
-    <module>standalone-jpa</module>
     <module>client-simple</module>    
-    <module>client</module>
-    <module>views</module>
+    <module>standalone-jpa</module>
+    <module>standalone-upc-ons</module>
     <module>tomcat-ucp-rest</module>
+    <module>tomcat-dbcp-rest</module>
+    <module>views</module>
   </modules>
 
   <!-- <repositories> -->
