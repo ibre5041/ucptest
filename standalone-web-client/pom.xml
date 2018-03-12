@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.ibre5041</groupId>
-  <artifactId>tomcat-dbcp-rest</artifactId>
-  <packaging>war</packaging>
+  <artifactId>standalone-web-client</artifactId>
+  <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
 
   <parent>
@@ -25,23 +25,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <build>
-    <finalName>dbcp-rest</finalName>
-
-    <plugins>
-      <plugin>
-	<groupId>org.apache.tomcat.maven</groupId>
-	<artifactId>tomcat7-maven-plugin</artifactId>
-	<version>2.1</version>
-	<configuration>
-	  <url>http://localhost:8080/manager/text</url>
-	  <username>test</username>
-	  <password>test</password>
-	</configuration>
-      </plugin>
-    </plugins>
-  </build>
 
   <dependencies>
 
@@ -65,22 +48,6 @@
       <version>${jersey2.version}</version>
     </dependency>
     
-    <!-- Jersey Server-->
-    <dependency>
-      <groupId>org.glassfish.jersey.containers</groupId>
-      <artifactId>jersey-container-servlet</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-server</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.media</groupId>
-      <artifactId>jersey-media-moxy</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
     <!-- Jersey Validation -->
     <dependency>
       <groupId>org.glassfish.jersey.ext</groupId>
@@ -92,21 +59,6 @@
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-json-jackson</artifactId>
       <version>${jersey2.version}</version>
-    </dependency>
-
-    <!-- TOMCAT library -->
-    <dependency>
-      <groupId>org.apache.tomcat</groupId>
-      <artifactId>tomcat-servlet-api</artifactId>
-      <version>${tomcat.version}</version>
-      <scope>provided</scope>
-    </dependency>
-            
-    <dependency>
-      <groupId>org.glassfish.jersey.containers</groupId>
-      <artifactId>jersey-container-servlet-core</artifactId>
-      <!-- use the following artifactId if you don't need servlet 2.x compatibility -->
-      <!-- artifactId>jersey-container-servlet</artifactId -->
     </dependency>
 
     <!-- needed for Jersey 2.26 and later -->

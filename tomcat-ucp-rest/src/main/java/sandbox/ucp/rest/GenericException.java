@@ -1,4 +1,4 @@
-package sandbox.rest;
+package sandbox.ucp.rest;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;

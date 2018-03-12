@@ -52,7 +52,7 @@ def updateAll():
     logging.info('Exiting')
 
 threads = []
-for i in range(100):
+for i in range(20):
     t = threading.Thread(target=updateAll)
     threads.append(t)
     t.start()

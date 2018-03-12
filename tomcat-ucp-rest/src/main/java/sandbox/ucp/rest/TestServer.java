@@ -1,4 +1,4 @@
-package sandbox.rest;
+package sandbox.ucp.rest;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;

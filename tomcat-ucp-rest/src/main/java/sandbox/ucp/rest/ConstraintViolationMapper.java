@@ -1,4 +1,4 @@
-package sandbox.rest;
+package sandbox.ucp.rest;
 
 import java.util.Set;
 import javax.validation.ConstraintViolation;

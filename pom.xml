@@ -25,8 +25,10 @@
     <module>client-simple</module>    
     <module>standalone-jpa</module>
     <module>standalone-upc-ons</module>
+    <module>standalone-web-client</module>
     <module>tomcat-ucp-rest</module>
     <module>tomcat-dbcp-rest</module>
+    <module>tomcat-monitor</module>    
     <module>views</module>
   </modules>
 
@@ -55,7 +57,6 @@
   <!-- </releases> -->
   <!-- </pluginRepository> -->
   <!-- </pluginRepositories> -->
-
   
   <dependencies>
     <dependency>

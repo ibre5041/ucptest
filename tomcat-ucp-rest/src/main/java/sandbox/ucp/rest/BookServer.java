@@ -1,14 +1,6 @@
-package sandbox.rest;
+package sandbox.ucp.rest;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,13 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import sandbox.pojo.RequestObj;
-import sandbox.pojo.ResponseObj;
-import sandbox.utils.BookSimpleDao;
-import sandbox.ws.UCPHelper;
+import sandbox.ucp.utils.BookSimpleDao;
 import sandbox.pojo.Book;
 /*
 Method 	URL 	Action
