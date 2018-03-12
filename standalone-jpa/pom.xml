@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>net.ibre5041</groupId>
-  <artifactId>ucptest-ws-jpa</artifactId>
+  <artifactId>standalone-jpa</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
 
@@ -15,7 +15,7 @@
   </parent>
 
   <build>
-    <finalName>onsws-jpa</finalName>
+    <finalName>ons-jpa</finalName>
 
     <plugins>
       <plugin>
@@ -52,7 +52,7 @@
 
     <dependency>
       <groupId>net.ibre5041</groupId>
-      <artifactId>ucptest-views</artifactId>
+      <artifactId>views</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
