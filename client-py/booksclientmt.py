@@ -21,7 +21,9 @@ def updateAll():
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
     # Replace with the correct URL
-    url = "http://localhost:8080/ucptest-ws/webapi/books/"
+    ##url = "http://localhost:8080/tomcat-ucp-rest/books/"
+    url = "http://localhost:8080/tomcat-dbcp-rest/books/"
+
 
     getAllResponse = requests.get(url, headers=headers)
     print (getAllResponse.status_code)

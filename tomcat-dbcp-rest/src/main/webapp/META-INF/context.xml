@@ -1,3 +1,6 @@
 <Context>
-<!--  moved to $CATALINA_BASE/conf/context.xml -->
+<!--
+    <ResourceLink auth="Container" global="jdbc/TomcatCP" name="jdbc/TomcatDbcpRestDataSource" type="javax.sql.DataSource"/>
+ -->
+	<ResourceLink auth="Container" global="jdbc/DBCP2"    name="jdbc/TomcatDbcpRestDataSource" type="javax.sql.DataSource"/>
 </Context>

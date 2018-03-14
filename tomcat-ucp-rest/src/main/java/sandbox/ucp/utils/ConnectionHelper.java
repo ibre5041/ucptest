@@ -16,8 +16,8 @@ public class ConnectionHelper {
 		try {
 			Context ctx = new InitialContext();
 			Context envContext = (Context) ctx.lookup("java:/comp/env");
-
-			m_pds = (PoolDataSource) envContext.lookup ("jdbc/UCPPoolFromContextXmlA");
+			// see context.xml mapping this name onto Resource defined in Tomcat's server.xml
+			m_pds = (PoolDataSource) envContext.lookup ("jdbc/TomcatUcpRestDataSource");
 			//m_pds.registerConnectionLabelingCallback(new BooksConnectionLabelingCallback());
 		} catch (Exception e) {
 			e.printStackTrace();

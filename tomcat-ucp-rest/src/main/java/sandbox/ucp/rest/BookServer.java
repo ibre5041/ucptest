@@ -12,7 +12,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import sandbox.ucp.utils.BookSimpleDao;
 import sandbox.pojo.Book;
+
 /*
+URL: http://localhost:8080/tomcat-ucp-rest/books
+
 Method 	URL 	Action
 	GET 	/api/books 					Retrieve all books
 	GET 	/api/books/search/Chateau 	Search for books with ‘Chateau’ in their name

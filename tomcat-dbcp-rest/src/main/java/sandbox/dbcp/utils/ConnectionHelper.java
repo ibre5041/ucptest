@@ -13,8 +13,8 @@ public class ConnectionHelper {
 		try {
 			Context ctx = new InitialContext();
 			Context envContext = (Context) ctx.lookup("java:/comp/env");
-
-			m_pds = (DataSource) envContext.lookup ("jdbc/DBCPOracle");
+			// see context.xml mapping this name onto Resource defined in Tomcat's server.xml
+			m_pds = (DataSource) envContext.lookup ("jdbc/TomcatDbcpRestDataSource");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

@@ -15,7 +15,7 @@ import sandbox.dbcp.utils.BookSimpleDao;
 import sandbox.pojo.Book;
 
 /*
-URL: http://localhost:8080/tomcat-dbcp-rest/webapi/books
+URL: http://localhost:8080/tomcat-dbcp-rest/books
 
 Method 	URL 	Action
 	GET 	/api/books 					Retrieve all books

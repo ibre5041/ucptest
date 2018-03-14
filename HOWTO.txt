@@ -25,13 +25,17 @@ PS: i looks like the official maven repository contains only drivers of version 
  git clone https://github.com/ibre5041/ucptest.git
 
 2.2 Eclipse import existing maven project (including all sub-modules)
-2.2.1 mvn eclipse:eclipse -Dwtpversion=2.0  -pl ws
+2.2.1 Eclipse install "Web, XML, and Java EE Developmen" => "JST Server Adapters"
+      Window -> Show View -> Servers
+      Define new server "Apache"/ Tomcat v9.0
+      Tomcat Overview -> Server Locations: choose Use Tomcat installation(takes control of Tomcat installation)
+      Tomcat Overview -> Open launch configuration -> Arguments add "-Doracle.ucp.jdbc.xmlConfigFile=file:/C:/oracle/apache-tomcat-9.0.5/conf/ucp.xml"
 
-2.2.2 Configure Web facet for ucptest-ws.
+2.2.2 Configure Web facet for tomcat-...-rest project
  Properties -> Project Facets
   Left: Java (Version 1.4 => 1.8)
   Left: Dynamic Web Module (3.0)
-  Right: Runtimes -> Apache tomcat v8.5
+  Right: Runtimes -> Apache tomcat v9.*
 
 3. Compile&Run
 3.1 Compile
@@ -39,9 +43,11 @@ PS: i looks like the official maven repository contains only drivers of version 
 mvn clean compile
 
 3.2 Deploy
-mvn tomcat7:redeploy -pl ws
-mvn package install -pl views
-mvn tomcat7:deploy -pl ws   (or mvn tomcat7:redeploy -pl ws)
+mvn clean compile package
+mvn package install  -pl views
+mvn tomcat7:redeploy -pl tomcat-dbcp-rest
+mvn tomcat7:redeploy -pl tomcat-ucp-rest
+mvn tomcat7:redeploy -pl tomcat-monitor
 
 3.3 Run
 ...
