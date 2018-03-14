@@ -1,0 +1,29 @@
+<ucp-properties>
+  <connection-pool
+      connection-factory-class-name="oracle.jdbc.pool.OracleDataSource"
+      connection-pool-name="UCPPoolA"
+      initial-pool-size="10"
+      max-connections-per-service="15"
+      max-pool-size="30"
+      min-pool-size="2"
+      password="onstest"
+      user="onstest"
+      shared="true"
+      url="jdbc:oracle:thin:@(DESCRIPTION =(TRANSPORT_CONNECT_TIMEOUT=3000)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"
+      ons-configuration="nodes=czcholsint846:6200,czcholsint847:6200"
+      >
+
+    <data-source data-source-name="UCPPoolA1" description="pdb1 data source" service="ACTEST"></data-source>
+    <data-source data-source-name="UCPPoolA2" description="pdb2 data source" service="ACTEST"></data-source>
+  </connection-pool>
+</ucp-properties>
+<!--
+
+    connection-labeling-callback="sandbox.utils.BooksConnectionLabelingCallback"
+
+    <connection-property name="oracle.jdbc.ReadTimeout" value="2000"></connection-property>
+    <connection-property name="oracle.net.OUTBOUND_CONNECT_TIMEOUT" value="2000"></connection-property>
+
+-->
+<!--?xml version="1.0" encoding="UTF-8"? -->
+<!-- see ucp.jar:/oracle/ucp/xml/configuration.xsd -->
