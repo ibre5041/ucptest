@@ -1,7 +1,9 @@
 1. Initial setup
+1.1 Database setup
+Follow instructions from docs/DATABASE.SETUP.sql
 
-1.1 Install Tomcat 8.x
-1.1.1 Configure Tomcat deployment
+2.1 Install Tomcat 8.x
+2.1.1 Configure Tomcat deployment
 tomcat-users.xml
   <role rolename="tomcat"/>
   <role rolename="manager-gui"/>
@@ -12,43 +14,44 @@ tomcat-users.xml
   <role rolename="admin-script"/>
   <user password="test" roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script" username="test"/>
 
-1.1.2 Configure Tomcat in Eclipse (add into Servers)
+2.1.2 Configure Tomcat in Eclipse (add into Servers)
 
-1.2 Install maven
-1.2.1 Configure maven (maven.oracle.com)
+2.2 Install maven
+2.2.1 Configure maven (maven.oracle.com)
 
 https://docs.oracle.com/middleware/1213/core/MAVEN/config_maven_repo.htm#MAVEN9015
-PS: i looks like the official maven repository contains only drivers of version 12.2.0.1 
+PS: it looks like the official maven repository contains only drivers of version 12.2.0.1 
 
-2. Setup sources
-2.1 Clone the repository
+3. Setup sources
+3.1 Clone the repository
  git clone https://github.com/ibre5041/ucptest.git
 
-2.2 Eclipse import existing maven project (including all sub-modules)
-2.2.1 Eclipse install "Web, XML, and Java EE Developmen" => "JST Server Adapters"
+3.2 Eclipse import existing maven project (including all sub-modules)
+3.2.1 Eclipse install "Web, XML, and Java EE Developmen" => "JST Server Adapters"
       Window -> Show View -> Servers
       Define new server "Apache"/ Tomcat v9.0
       Tomcat Overview -> Server Locations: choose Use Tomcat installation(takes control of Tomcat installation)
       Tomcat Overview -> Open launch configuration -> Arguments add "-Doracle.ucp.jdbc.xmlConfigFile=file:/C:/oracle/apache-tomcat-9.0.5/conf/ucp.xml"
+      Tomcat Overview -> Configuration path -> Browse - set this projects sub-directory "tomcat-config/config-8.5"
 
-2.2.2 Configure Web facet for tomcat-...-rest project
+3.2.2 Configure Web facet for tomcat-...-rest project
  Properties -> Project Facets
   Left: Java (Version 1.4 => 1.8)
   Left: Dynamic Web Module (3.0)
   Right: Runtimes -> Apache tomcat v9.*
 
-3. Compile&Run
-3.1 Compile
+4. Compile&Run
+4.1 Compile
 
 mvn clean compile
 
-3.2 Deploy
+4.2 Deploy
 mvn clean compile package
 mvn package install  -pl views
 mvn tomcat7:redeploy -pl tomcat-dbcp-rest
 mvn tomcat7:redeploy -pl tomcat-ucp-rest
 mvn tomcat7:redeploy -pl tomcat-monitor
 
-3.3 Run
+4.3 Run
 ...
 

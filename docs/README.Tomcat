@@ -1,0 +1,104 @@
+This project ilustrates various ways how to configure connection pooling in Tomcat(ver. 8 and 9) against Oracle RAC.
+The default Tomcat installation contains 2 connection pooling implementations:
+
+ - tomcat-jdbc.jar (aka tomcat.jdbc.pool)
+ - tomcat-dbcp.jar (aka Apache Commons DBCP2)
+
+the 3rd connection pool implementation is Oracle specific:
+ - ucp.jar (aka oracle.ucp.jdbc.PoolDataSourceImpl)
+
+Each connection pool is defined as global resource $CATALINA_BASE/conf/server.xml
+
+<Server ...>
+  ...
+  <GlobalNamingResources>
+    <Resource auth="Container"
+    	      factory="..."
+	      name="..."
+              ...
+    />
+
+The connection pools is then mapped into application context via context file .war/<project name>/META-INF/context.xml
+<Context>
+  <ResourceLink auth="Container"
+  		global="..global.name.from.server.xml.."
+		name="..projects.local.name.."
+		type="javax.sql.DataSource"
+		/>
+</Context>
+
+Connection pool instance is then acessed via JNDI lookup from the code:
+                try {
+                        Context ctx = new InitialContext();
+                        Context envContext = (Context) ctx.lookup("java:/comp/env");
+                        // see context.xml mapping this name onto Resource defined in Tomcat's server.xml
+                        m_pds = (DataSource) envContext.lookup ("..name.of.resource.from.context.xml");
+                } catch (Exception e) {
+
+
+In order to re-connect the application between nodes, it is important the connection is not openned forever.
+The reasonable life time for a connection is one hour. All connection pools described here implement this feature,
+but each implementation uses different parameter names.
+
+ - Tomcat JDBC pool config
+
+In case of Tomcat's JDBC pool the parameters maxAge and ... are crutial.
+The parameter maxAge determines a connection's lifetime in miliseconds.
+    <Resource auth="Container"
+	      factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+	      driverClassName="oracle.jdbc.OracleDriver"
+	      type="javax.sql.DataSource"	      
+	      maxActive="..."
+	      maxAge="3600000"
+	      maxIdle="10"
+	      minEvictableIdleTimeMillis="30000"
+	      name="..."
+	      username="..."
+              password="..."
+	      url="..."	      
+	      />
+All configuration parameters for this pool are described here:	      
+https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html
+
+ - Apache Commons DBCP2 config
+The same parameters are also in DBCP2, but their names are maxConnLifetimeMillis and ...
+    <Resource auth="Container"
+	      factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
+	      driverClassName="oracle.jdbc.OracleDriver"
+              type="javax.sql.DataSource"
+	      maxTotal="..."
+	      maxConnLifetimeMillis="3600000"
+	      maxIdle="..."
+	      minEvictableIdleTimeMillis="30000"
+	      name="..."
+	      username="..."
+	      password="..."	      
+	      url="..." 
+	      />
+All configuration parameters for this pool are described here:
+https://commons.apache.org/proper/commons-dbcp/configuration.html
+
+ - Oracle Universal Connection Pool(UCP) config
+Oracle UCP offers many configuration options. Some of them had to pass from Tomcat into UCP.
+Therefore a separate config file for UCP: $CATALINA_BASE/conf/ucp.xml is used.
+
+The UCP uses system property oracle.ucp.jdbc.xmlConfigFile to point into xml config files.
+!!! Warning !!! value of this property must be in URI format, not just a plan filesystem path
+
+Amend ${CATALINA_BASE}/bin/setenv.sh to set this property:
+
+CATALINA_OPTS="-Doracle.ucp.jdbc.xmlConfigFile=file:/${CATALINA_BASE}/conf/ucp.xml"
+
+And finally configure UCP connection pool as global resource:
+    <Resource auth="Container"
+	      factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+	      global="jdbc/UCPPoolFromContextXmlA"
+	      name="jdbc/UCPPoolFromContextXmlA"
+	      type="oracle.ucp.jdbc.PoolDataSource"
+              dataSourceFromConfiguration="UCPPoolFromUcpXmlA"
+	      />
+
+In this case there is no username, password nor url provided. The only paramter here is dataSourceFromConfiguration.
+This point onto connection pool defined in a separate config file ucp.xml.
+
+TODO SEE README.UCP
