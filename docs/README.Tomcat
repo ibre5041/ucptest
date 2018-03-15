@@ -7,6 +7,10 @@ The default Tomcat installation contains 2 connection pooling implementations:
 the 3rd connection pool implementation is Oracle specific:
  - ucp.jar (aka oracle.ucp.jdbc.PoolDataSourceImpl)
 
+the 4th connection pool tested is Hikari
+ - HikariCP-2.7.8.jar (use mvn compile and maven will download it)
+ - then copy HikariCP-2.7.8.jar, slf4j-api-1.7.25.jar into $CATALINA_BASE/lib/
+ 
 Each connection pool is defined as global resource $CATALINA_BASE/conf/server.xml
 
 <Server ...>
@@ -102,3 +106,37 @@ In this case there is no username, password nor url provided. The only paramter 
 This point onto connection pool defined in a separate config file ucp.xml.
 
 TODO SEE README.UCP
+
+ - HikariCP
+   use mvn compile and maven will download download jars. HikariCP-2.7.8.jar and slf4j-api-1.7.25.jar.
+   then copy HikariCP-2.7.8.jar, slf4j-api-1.7.25.jar into $CATALINA_BASE/lib/
+
+    <!-- Use Hikari
+         https://github.com/brettwooldridge/HikariCP#popular-datasource-class-names
+         On contrary from other connection pool implementations, for Hikari the max lifetime for a connection is limited by default:
+         maxLifetime:
+         This property controls the maximum lifetime of a connection in the pool.
+         An in-use connection will never be retired, only when it is closed will it then be removed.
+         On a connection-by-connection basis, minor negative attenuation is applied to avoid mass-extinction in the pool.
+         We strongly recommend setting this value, and it should be at least 30 seconds less than any database
+         or infrastructure imposed connection time limit.
+         A value of 0 indicates no maximum lifetime (infinite lifetime), subject of course to the idleTimeout setting.
+         Default: 1800000 (30 minutes)
+    -->
+    <!-- We recommended using dataSourceClassName instead of jdbcUrl, but either is acceptable. We'll say that again, either is acceptable. -->
+    <Resource auth="Container"
+              factory="com.zaxxer.hikari.HikariJNDIFactory"
+              dataSourceClassName="oracle.jdbc.pool.OracleDataSource"
+              name="jdbc/HikariCP"
+              type="javax.sql.DataSource"
+              minimumIdle="5"
+              maximumPoolSize="20"
+              maxLifetime="90000"
+              dataSource.implicitCachingEnabled="true"
+              dataSource.user="ONSTEST"
+              dataSource.password="onstest"
+              dataSource.url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"
+              />
+
+All configuration parameters for this pool are described here:
+https://github.com/brettwooldridge/HikariCP#popular-datasource-class-names

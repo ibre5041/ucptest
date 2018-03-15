@@ -22,8 +22,8 @@ def updateAll():
 
     # Replace with the correct URL
     ##url = "http://localhost:8080/tomcat-ucp-rest/books/"
-    url = "http://localhost:8080/tomcat-dbcp-rest/books/"
-
+    ##url = "http://localhost:8080/tomcat-dbcp-rest/books/"
+    url = "http://localhost:8080/tomcat-hikari-rest/books/"
 
     getAllResponse = requests.get(url, headers=headers)
     print (getAllResponse.status_code)

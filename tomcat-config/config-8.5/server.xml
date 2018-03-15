@@ -38,13 +38,13 @@
     -->
     <Resource auth="Container" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" name="UserDatabase" pathname="conf/tomcat-users.xml" type="org.apache.catalina.UserDatabase"/>
 
-    <Resource auth="Container"
-	      dataSourceFromConfiguration="UCPPoolFromUcpXmlA"
-	      factory="oracle.ucp.jdbc.PoolDataSourceImpl"
-	      global="jdbc/UCPPoolFromContextXmlA"
-	      name="jdbc/UCPPoolFromContextXmlA"
-	      type="oracle.ucp.jdbc.PoolDataSource"
-	      />
+    <!-- <Resource auth="Container" -->
+    <!-- 	      dataSourceFromConfiguration="UCPPoolFromUcpXmlA" -->
+    <!-- 	      factory="oracle.ucp.jdbc.PoolDataSourceImpl" -->
+    <!-- 	      global="jdbc/UCPPoolFromContextXmlA" -->
+    <!-- 	      name="jdbc/UCPPoolFromContextXmlA" -->
+    <!-- 	      type="oracle.ucp.jdbc.PoolDataSource" -->
+    <!-- 	      /> -->
     
     <!-- Tomcat contains TWO Connection Pool implementations
 	 tomcat-jdbc.jar
@@ -55,36 +55,65 @@
     <!-- Use TOMCAT JDBC POOL RATHER THAN APACHE DBCP2 (factory=)
 	 https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html
     -->
-    <Resource auth="Container"
-	      factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
-	      driverClassName="oracle.jdbc.OracleDriver"
-	      maxActive="20"
-	      maxAge="90000"
-	      maxIdle="10"
-	      maxWait="-1"
-	      minEvictableIdleTimeMillis="30000"
-	      name="jdbc/TomcatCP"
-	      password="onstest"
-	      type="javax.sql.DataSource"
-	      url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))" username="ONSTEST"
-	      />
+    <!-- <Resource auth="Container" -->
+    <!-- 	      factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" -->
+    <!-- 	      driverClassName="oracle.jdbc.OracleDriver" -->
+    <!-- 	      maxActive="20" -->
+    <!-- 	      maxAge="90000" -->
+    <!-- 	      maxIdle="10" -->
+    <!-- 	      maxWait="-1" -->
+    <!-- 	      minEvictableIdleTimeMillis="30000" -->
+    <!-- 	      name="jdbc/TomcatCP" -->
+    <!-- 	      username="ONSTEST" -->
+    <!-- 	      password="onstest" -->
+    <!-- 	      type="javax.sql.DataSource" -->
+    <!-- 	      url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))" -->
+    <!-- 	      /> -->
 
     <!-- Use APACHE DBCP2 (factory=)
 	 https://commons.apache.org/proper/commons-dbcp/configuration.html
     -->
+    <!-- <Resource auth="Container" -->
+    <!-- 	      factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory" -->
+    <!-- 	      driverClassName="oracle.jdbc.OracleDriver" -->
+    <!-- 	      maxTotal="20" -->
+    <!-- 	      maxConnLifetimeMillis="90000" -->
+    <!-- 	      maxIdle="10" -->
+    <!-- 	      minEvictableIdleTimeMillis="30000" -->
+    <!-- 	      name="jdbc/DBCP2" -->
+    <!-- 	      username="ONSTEST" -->
+    <!-- 	      password="onstest" -->
+    <!-- 	      type="javax.sql.DataSource" -->
+    <!-- 	      url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))" -->
+    <!-- 	      /> -->
+
+    <!-- Use Hikari
+	 https://github.com/brettwooldridge/HikariCP#popular-datasource-class-names
+	 On contrary from other connection pool implementations, for Hikari the max lifetime for a connection is limited by default:
+	 maxLifetime:
+	 This property controls the maximum lifetime of a connection in the pool.
+	 An in-use connection will never be retired, only when it is closed will it then be removed.
+	 On a connection-by-connection basis, minor negative attenuation is applied to avoid mass-extinction in the pool.
+	 We strongly recommend setting this value, and it should be at least 30 seconds less than any database
+	 or infrastructure imposed connection time limit.
+	 A value of 0 indicates no maximum lifetime (infinite lifetime), subject of course to the idleTimeout setting.
+	 Default: 1800000 (30 minutes)
+    -->    
+    <!-- We recommended using dataSourceClassName instead of jdbcUrl, but either is acceptable. We'll say that again, either is acceptable. -->
     <Resource auth="Container"
-	      factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
-	      driverClassName="oracle.jdbc.OracleDriver"
-	      maxTotal="20"
-	      maxConnLifetimeMillis="90000"
-	      maxIdle="10"
-	      minEvictableIdleTimeMillis="30000"
-	      name="jdbc/DBCP2"
-	      password="onstest"
+	      factory="com.zaxxer.hikari.HikariJNDIFactory"
+	      dataSourceClassName="oracle.jdbc.pool.OracleDataSource"
+	      name="jdbc/HikariCP"
 	      type="javax.sql.DataSource"
-	      url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))" username="ONSTEST"
+	      minimumIdle="5" 
+	      maximumPoolSize="20"
+	      maxLifetime="90000"
+	      dataSource.implicitCachingEnabled="true"
+	      dataSource.user="ONSTEST"
+	      dataSource.password="onstest"
+	      dataSource.url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"
 	      />
-    
+
   </GlobalNamingResources>
 
   <!-- A "Service" is a collection of one or more "Connectors" that share

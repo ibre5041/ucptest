@@ -50,6 +50,7 @@ mvn clean compile package
 mvn package install  -pl views
 mvn tomcat7:redeploy -pl tomcat-dbcp-rest
 mvn tomcat7:redeploy -pl tomcat-ucp-rest
+mvn tomcat7:redeploy -pl tomcat-hikari-rest
 mvn tomcat7:redeploy -pl tomcat-monitor
 
 4.3 Run
