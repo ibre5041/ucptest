@@ -39,6 +39,9 @@ BEGIN
 END book_id_trig;
 /
 
+drop table "ONSTEST"."ACDEMOTAB"
+/
+
 create table "ONSTEST"."ACDEMOTAB"
 (
 	message varchar2(128),
@@ -47,9 +50,6 @@ create table "ONSTEST"."ACDEMOTAB"
 /
 
 create index "ONSTEST"."BOOK_IX1" on "ONSTEST"."BOOK"(upper(name))
-/
-
-drop table "ONSTEST"."ACDEMOTAB"
 /
 
 CREATE OR REPLACE PROCEDURE "ONSTEST"."CANICARRYON" (pi_message varchar2)
