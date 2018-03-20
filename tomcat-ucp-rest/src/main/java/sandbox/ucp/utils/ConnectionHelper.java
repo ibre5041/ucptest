@@ -35,13 +35,8 @@ public class ConnectionHelper {
 	PoolDataSource m_pds;	
 	
 	public Connection getConnection()  throws Exception {
-//		java.util.Properties props = new java.util.Properties();
-//		props.put("v$session.osuser", System.getProperty("user.name").toString());
-//		props.put("v$session.machine", InetAddress.getLocalHost().getCanonicalHostName());
-//		props.put("v$session.program", "My Program Name");
-//		Connection connection = m_pds.getConnection(props);
 		Connection connection = m_pds.getConnection();
-		connection.setAutoCommit(false);
+		connection.setAutoCommit(false); // TODO set this in UCP.xml
 		return connection;
 	}
 }

@@ -1,5 +1,6 @@
 package sandbox.hikari.utils;
 
+import java.net.InetAddress;
 import java.sql.Connection;
 
 import javax.naming.Context;
