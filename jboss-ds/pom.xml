@@ -14,18 +14,6 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-	<groupId>org.glassfish.jersey</groupId>
-	<artifactId>jersey-bom</artifactId>
-	<version>${jersey2.version}</version>
-	<type>pom</type>
-	<scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <build>
     <finalName>ds-rest</finalName>
 
@@ -34,6 +22,12 @@
         <groupId>org.jboss.as.plugins</groupId>
         <artifactId>jboss-as-maven-plugin</artifactId>
         <version>7.9.Final</version>
+	<configuration>
+	  <hostname>192.168.8.200</hostname>
+	  <username>admin</username>
+	  <password>Adm1n</password>
+	  <port>9999</port>
+	</configuration>
       </plugin>
     </plugins>
   </build>
@@ -46,61 +40,11 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     
-    <!-- JAX-RS -->
     <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-      <version>${jaxrs.version}</version>
-    </dependency>
-    
-    <!-- Jersey Client-->
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-    
-    <!-- Jersey Server-->
-    <dependency>
-      <groupId>org.glassfish.jersey.containers</groupId>
-      <artifactId>jersey-container-servlet</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-server</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.media</groupId>
-      <artifactId>jersey-media-moxy</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-    <!-- Jersey Validation -->
-    <dependency>
-      <groupId>org.glassfish.jersey.ext</groupId>
-      <artifactId>jersey-bean-validation</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-    <!-- JSON library -->
-    <dependency>
-      <groupId>org.glassfish.jersey.media</groupId>
-      <artifactId>jersey-media-json-jackson</artifactId>
-      <version>${jersey2.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.glassfish.jersey.containers</groupId>
-      <artifactId>jersey-container-servlet-core</artifactId>
-      <!-- use the following artifactId if you don't need servlet 2.x compatibility -->
-      <!-- artifactId>jersey-container-servlet</artifactId -->
-    </dependency>
-
-    <!-- needed for Jersey 2.26 and later -->
-    <dependency>
-      <groupId>org.glassfish.jersey.inject</groupId>
-      <artifactId>jersey-hk2</artifactId>
-      <version>${jersey2.version}</version>      
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.0</version>
+      <scope>provided</scope>
     </dependency>
     
   </dependencies>
