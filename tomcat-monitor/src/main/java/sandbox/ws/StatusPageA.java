@@ -97,8 +97,8 @@ public class StatusPageA extends HttpServlet {
 			Context ctx = new InitialContext();
 			Context envContext = (Context) ctx.lookup("java:/comp/env");
 	        
-			// Look up a data source
-			DataSource ds =(DataSource)envContext.lookup("jdbc/UCPPoolFromContextXmlA");
+			// Look up a data source see context.xml for mapping
+			DataSource ds =(DataSource)envContext.lookup("jdbc/TomcatUcpRestDataSource");
 			PoolDataSource pds = (PoolDataSource)ds;
 
 			out.println("PoolDataSource id:" + System.identityHashCode(pds));
@@ -107,6 +107,7 @@ public class StatusPageA extends HttpServlet {
 			out.println("\tbuild date: " + OracleDriver.getBuildDate());
 			out.println("\tJDBC ver:" + OracleDriver.getJDBCVersion());
 			out.println("\tDebug: " + String.valueOf(OracleDriver.isDebug()));
+			out.println("\tall conn props:" + pds.getConnectionProperties().toString());
 			out.println();
 			out.println("InitialPoolSize: " + pds.getInitialPoolSize());
 			out.println("MinPoolSize: " + pds.getMinPoolSize());

@@ -119,6 +119,7 @@ public class StatusPageB extends HttpServlet {
 			out.println("\tbuild date: " + OracleDriver.getBuildDate());
 			out.println("\tJDBC ver:" + OracleDriver.getJDBCVersion());
 			out.println("\tDebug: " + String.valueOf(OracleDriver.isDebug()));
+			out.println("\tall conn props:" + pds.getConnectionProperties().toString());			
 			out.println();
 			out.println("InitialPoolSize: " + pds.getInitialPoolSize());
 			out.println("MinPoolSize: " + pds.getMinPoolSize());
