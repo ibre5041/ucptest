@@ -1,0 +1,50 @@
+Connection labeling
+
+Oracle database connections can be associtated with some diagnostic information.
+This infomation can be viewed either from outter context via the view gv$session:
+
+SQL> select distinct service_name, osuser, program, machine, module, action, terminal from gv$session where machine in('CZCHOWN5020546','UCP machine');            
+                                                                                                                                                                   
+SERVICE_NA OSUSER                         PROGRAM                        MACHINE                        MODULE               ACTION               TERMINAL
+---------- ------------------------------ ------------------------------ ------------------------------ -------------------- -------------------- -----------------
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal
+
+
+or from the connectin itself using the SYS_CONTEXT function:
+SELECT sys_context('userenv', 'sessionid')
+ , sys_context('userenv', 'client_identifier')
+ , sys_context('userenv', 'client_info')
+ , sys_context('userenv', 'host')
+ , sys_context('userenv', 'os_user')
+ , sys_context('userenv', 'terminal')
+FROM dual";
+
+The mapping between gv$session and sys_context is not exactly one-to-one.
+
+Implementation:
+
+ - via oracle.ucp.jdbc.PoolDataSource. This calls that extended api method:
+   Connection getConnection(Properties arg0) throws SQLException;
+
+   But this works only when, PoolDataSource is associated ConnectionLabelingCallback instance.
+
+   (this mechanism is beyond scope of this tutorial)
+
+ - via ucp.xml
+   - Copy the file ucp.xml into ${CATALINA_BASE}/conf/ 
+   - Modify ${CATALINA_BASE}/bin/setenv.sh (set the property oracle.ucp.jdbc.xmlConfigFile)
+   - Put connection-property into the ucp.xml file:
+
+    <connection-property name="v$session.module"   value="UCP module"/>
+    <connection-property name="v$session.osuser"   value="UCP osuser"/>
+    <connection-property name="v$session.program"  value="UCP program"/>
+    <connection-property name="v$session.terminal" value="UCP terminal"/>
+
+   - Test:
+
+SQL> select distinct service_name, osuser, program, machine, module, action, terminal from gv$session where machine in('CZCHOWN5020546','UCP machine');            
+                                                                                                                                                                   
+SERVICE_NA OSUSER                         PROGRAM                        MACHINE                        MODULE               ACTION               TERMINAL
+---------- ------------------------------ ------------------------------ ------------------------------ -------------------- -------------------- -----------------
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal
+
