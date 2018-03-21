@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ucp-properties>
+  <!-- use connection labeling features, configured on connection pool level --> 
+  <connection-pool
+      connection-pool-name="UCPPOOL"
+      connection-factory-class-name="oracle.jdbc.pool.OracleDataSource"
+      url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"
+      user="ONSTEST"
+      password="onstest"
+      initial-pool-size="10"
+      min-pool-size="5" 
+      max-pool-size="20"
+      connection-repurpose-threshold="13"
+      max-connections-per-service="15"
+      validate-connection-on-borrow="true"
+      sql-for-validate-connection="select 1 from dual"
+      shared="true"
+      ons-configuration="nodes=node846:6200,node847:6200"
+      fast-connection-failover-enabled="true"      
+      >
+
+    <!-- this does not seem to work -->
+    <!-- <connection-property name="OracleConnection.CONNECTION_PROPERTY_AUTOCOMMIT" value="false"/> -->
+
+    <!--These two seem to be ingnored since JDBC 10g. see
+        https://github.com/Apress/secrets-of-oracle-db/blob/master/source_code_depot/JdbcInstrumentationOracle9i.java
+        -->
+    <connection-property name="v$session.client_identifier" value="UCP CI1"/>
+    <connection-property name="v$session.client_info" value="UCP CI2"/>
+
+    <!--Also this one seems to be ignored -->
+    <connection-property name="v$session.action"   value="UCP action" />
+
+    <!-- This one works, but was commented out. Leave a real hostname in V$SESSION.MACHINE -->
+    <!-- <connection-property name="v$session.machine"  value="UCP machine"/> -->
+
+    <connection-property name="v$session.module"   value="UCP module"/>
+    <connection-property name="v$session.osuser"   value="UCP osuser"/>
+    <connection-property name="v$session.program"  value="UCP program"/>
+    <connection-property name="v$session.terminal" value="UCP terminal"/>
+
+    <data-source data-source-name="UCPPoolFromUcpXmlA" description="1st data source"></data-source>
+    <data-source data-source-name="UCPPoolFromUcpXmlB" description="2nd data source"></data-source>
+
+  </connection-pool>
+</ucp-properties>

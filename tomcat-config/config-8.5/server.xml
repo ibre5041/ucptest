@@ -38,13 +38,13 @@
     -->
     <Resource auth="Container" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" name="UserDatabase" pathname="conf/tomcat-users.xml" type="org.apache.catalina.UserDatabase"/>
 
-    <!-- <Resource auth="Container" -->
-    <!-- 	      dataSourceFromConfiguration="UCPPoolFromUcpXmlA" -->
-    <!-- 	      factory="oracle.ucp.jdbc.PoolDataSourceImpl" -->
-    <!-- 	      global="jdbc/UCPPoolFromContextXmlA" -->
-    <!-- 	      name="jdbc/UCPPoolFromContextXmlA" -->
-    <!-- 	      type="oracle.ucp.jdbc.PoolDataSource" -->
-    <!-- 	      /> -->
+    <Resource auth="Container"
+    	      dataSourceFromConfiguration="UCPPoolFromUcpXmlA"
+    	      factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+    	      global="jdbc/UCPPoolFromContextXmlA"
+    	      name="jdbc/UCPPoolFromContextXmlA"
+    	      type="oracle.ucp.jdbc.PoolDataSource"
+    	      />
     
     <!-- Tomcat contains TWO Connection Pool implementations
 	 tomcat-jdbc.jar
@@ -100,19 +100,19 @@
 	 Default: 1800000 (30 minutes)
     -->    
     <!-- We recommended using dataSourceClassName instead of jdbcUrl, but either is acceptable. We'll say that again, either is acceptable. -->
-    <Resource auth="Container"
-	      factory="com.zaxxer.hikari.HikariJNDIFactory"
-	      dataSourceClassName="oracle.jdbc.pool.OracleDataSource"
-	      name="jdbc/HikariCP"
-	      type="javax.sql.DataSource"
-	      minimumIdle="5" 
-	      maximumPoolSize="20"
-	      maxLifetime="90000"
-	      dataSource.implicitCachingEnabled="true"
-	      dataSource.user="ONSTEST"
-	      dataSource.password="onstest"
-	      dataSource.url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"
-	      />
+    <!-- <Resource auth="Container" -->
+    <!-- 	      factory="com.zaxxer.hikari.HikariJNDIFactory" -->
+    <!-- 	      dataSourceClassName="oracle.jdbc.pool.OracleDataSource" -->
+    <!-- 	      name="jdbc/HikariCP" -->
+    <!-- 	      type="javax.sql.DataSource" -->
+    <!-- 	      minimumIdle="5"  -->
+    <!-- 	      maximumPoolSize="20" -->
+    <!-- 	      maxLifetime="90000" -->
+    <!-- 	      dataSource.implicitCachingEnabled="true" -->
+    <!-- 	      dataSource.user="ONSTEST" -->
+    <!-- 	      dataSource.password="onstest" -->
+    <!-- 	      dataSource.url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))" -->
+    <!-- 	      /> -->
 
   </GlobalNamingResources>
 

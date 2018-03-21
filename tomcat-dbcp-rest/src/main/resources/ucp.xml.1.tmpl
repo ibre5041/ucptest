@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ucp-properties>
+  <!-- simplest configuration. Use max-connection-reuse-time="60" (1 minute) to age out connections -->
   <connection-pool
       connection-pool-name="UCPPOOL"
       connection-factory-class-name="oracle.jdbc.pool.OracleDataSource"
@@ -14,10 +15,8 @@
       validate-connection-on-borrow="true"
       sql-for-validate-connection="select 1 from dual"
       shared="true"
+      max-connection-reuse-time="60"
       >
-
-    <connection-property name="oracle.jdbc.ReadTimeout" value="2000"/>
-    <connection-property name="oracle.net.OUTBOUND_CONNECT_TIMEOUT" value="2000"/> 
 
     <data-source data-source-name="UCPPoolFromUcpXmlA" description="1st data source"></data-source>
     <data-source data-source-name="UCPPoolFromUcpXmlB" description="2nd data source"></data-source>

@@ -3,10 +3,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.ibre5041</groupId>
   <artifactId>jboss-ds</artifactId>
   <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
 
   <parent>
     <groupId>net.ibre5041</groupId>

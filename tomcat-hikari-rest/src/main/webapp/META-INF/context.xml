@@ -1,3 +1,0 @@
-<Context>  
-	<ResourceLink auth="Container" global="jdbc/HikariCP"    name="jdbc/HikariRestDataSource" type="javax.sql.DataSource"/>
-</Context>

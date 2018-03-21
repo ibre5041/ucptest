@@ -107,7 +107,8 @@ This point onto connection pool defined in a separate config file ucp.xml.
 
 TODO SEE README.UCP
 
- - HikariCP
+
+- HikariCP
    use mvn compile and maven will download download jars. HikariCP-2.7.8.jar and slf4j-api-1.7.25.jar.
    then copy HikariCP-2.7.8.jar, slf4j-api-1.7.25.jar into $CATALINA_BASE/lib/
 

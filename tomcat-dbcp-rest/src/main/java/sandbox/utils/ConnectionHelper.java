@@ -1,13 +1,10 @@
-package sandbox.ucp.utils;
+package sandbox.utils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.InetAddress;
 import java.sql.Connection;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import oracle.ucp.jdbc.PoolDataSource;
+import javax.sql.DataSource;
 
 public class ConnectionHelper {
 	private static ConnectionHelper instance = null;
@@ -17,8 +14,7 @@ public class ConnectionHelper {
 			Context ctx = new InitialContext();
 			Context envContext = (Context) ctx.lookup("java:/comp/env");
 			// see context.xml mapping this name onto Resource defined in Tomcat's server.xml
-			m_pds = (PoolDataSource) envContext.lookup ("jdbc/TomcatUcpRestDataSource");
-			//m_pds.registerConnectionLabelingCallback(new BooksConnectionLabelingCallback());
+			m_pds = (DataSource) envContext.lookup ("jdbc/DataSource");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -32,11 +28,11 @@ public class ConnectionHelper {
 		return instance;
 	}
 	   
-	PoolDataSource m_pds;	
+	DataSource m_pds;	
 	
 	public Connection getConnection()  throws Exception {
 		Connection connection = m_pds.getConnection();
-		connection.setAutoCommit(false); // TODO set this in UCP.xml
+		connection.setAutoCommit(false);
 		return connection;
 	}
 }

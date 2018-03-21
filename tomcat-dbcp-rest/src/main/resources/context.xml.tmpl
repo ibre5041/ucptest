@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!-- USE connection pool configuration stored at .war level
+  <Resource
+      name="jdbc/UCPPoolFromContextXml"
+      auth="Container"
+      factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+      type="oracle.ucp.jdbc.PoolDataSource"
+      description="UCP JNDI Connection Pool for Application Continuity"
+      connectionFactoryClassName="oracle.jdbc.replay.OracleDataSourceImpl"
+      initialPoolSize="10"
+      minPoolSize="10"
+      maxPoolSize="50"
+      inactiveConnectionTimeout="20"
+      user="onstest"
+      password="onstest"
+      url="jdbc:oracle:thin:@(DESCRIPTION =(TRANSPORT_CONNECT_TIMEOUT=100)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=infra12db-scan)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"  
+      connectionPoolName="UCPPool"
+      validateConnectionOnBorrow="true"
+      onsConfiguration="nodes=node846:6200,node847:6200"
+      fastConnectionFailoverEnabled="true"
+      sqlForValidateConnection="select 1 from DUAL" />   
+</Context>

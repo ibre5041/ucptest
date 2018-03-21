@@ -127,7 +127,7 @@ public class StatusPageA extends HttpServlet {
 			out.println("ConnectionReuseCount: " + pds.getMaxConnectionReuseCount());
 			out.println("SecondsToTrustIdleConnection: " + pds.getSecondsToTrustIdleConnection());
 			out.println("FailoverEnabled: " + pds.getFastConnectionFailoverEnabled());
-			out.println("MaxConnectionReuseTime" + pds.getMaxConnectionReuseTime());
+			out.println("MaxConnectionReuseTime: " + pds.getMaxConnectionReuseTime());
 			
 			oracle.ucp.jdbc.JDBCConnectionPoolStatistics stats = pds.getStatistics();
 			out.println("\tgetAvailableConnectionsCount() " + stats.getAvailableConnectionsCount());

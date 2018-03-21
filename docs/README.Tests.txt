@@ -226,6 +226,38 @@ WARNING: The web application [tomcat-ucp-rest] appears to have started a thread 
  java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
  java.lang.Thread.run(Unknown Source)
 
+
+- Fast Connection Failover (UCP) test.
+ - Configure UCP to react to ONS messages. In ucp.xml set:
+      ons-configuration="nodes=node846:6200,node847:6200"
+      fast-connection-failover-enabled="true"
+ - Connections status:
+SQL> select service_name, osuser, program, machine, module, action, terminal, inst_id from gv$session where machine in('...','UCP machine');
+
+SERVICE_NA OSUSER                         PROGRAM                        MACHINE                        MODULE               ACTION               TERMINAL                          INST_ID
+---------- ------------------------------ ------------------------------ ------------------------------ -------------------- -------------------- ------------------------------ ----------
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            1
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            1
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            1
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            1
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            1
+
+ - Relocate the service:
+$ srvctl relocate service -d INFRADB -s ACTEST -oldinst INFRADB1 -newinst INFRADB2
+
+ - Connections status:
+SQL> select service_name, osuser, program, machine, module, action, terminal, inst_id from gv$session where machine in('CZCHOWN5020546','UCP machine');
+
+SERVICE_NA OSUSER                         PROGRAM                        MACHINE                        MODULE               ACTION               TERMINAL                          INST_ID
+---------- ------------------------------ ------------------------------ ------------------------------ -------------------- -------------------- ------------------------------ ----------
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            2
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            2
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            2
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            2
+ACTEST     UCP osuser                     UCP program                    CZCHOWN5020546                 UCP program                               UCP terminal                            2
+
+ RESULT: PASSED. All unused connections failed over instanly.
+
 HikariCP
  - deploy the app tomcat-hikari-rest
  - Check database connections:

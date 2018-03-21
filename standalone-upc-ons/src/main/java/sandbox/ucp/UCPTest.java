@@ -19,6 +19,19 @@ import sandbox.fan.SimpleFan;
 import java.sql.ResultSet;
 import oracle.jdbc.OracleDriver;
 
+/***************
+ * 
+ * Sample standalone application UCP
+ * 
+ * run as:
+ * mvn exec:exec
+ * 
+ * reclocate resouce while the app is runnning:
+ * /oracle/u01/db/12.1.0.2/DBA$ srvctl relocate service -d RHRAC -s ACTEST -oldinst RHRAC2 -newinst RHRAC1
+ * /oracle/u01/db/12.1.0.2/DBA$ srvctl relocate service -d RHRAC -s ACTEST -oldinst RHRAC1 -newinst RHRAC2
+ *
+ */
+
 public class UCPTest {
 
 	public static Properties loadProperties() {

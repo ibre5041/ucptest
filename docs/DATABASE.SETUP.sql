@@ -24,6 +24,7 @@ create table "ONSTEST"."BOOK"
 	id number,
 	name varchar2(128),
 	author varchar2(128),
+	cnt number default(1),
 	CONSTRAINT BOOKS_PK PRIMARY KEY (id)
 )
 /
@@ -58,6 +59,15 @@ begin
  insert into acdemotab (message) values (pi_message);
  dbms_lock.sleep(20);
  commit;
+end;
+/
+
+CREATE OR REPLACE FUNCTION "ONSTEST"."SLOW" (n number)
+return number
+as
+begin
+ dbms_lock.sleep(n);
+ return n;
 end;
 /
 

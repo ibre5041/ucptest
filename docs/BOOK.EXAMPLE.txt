@@ -1,8 +1,6 @@
 
 - URL: 
 http://localhost:8080/tomcat-dbcp-rest/books
-http://localhost:8080/tomcat-ucp-rest/books
-http://localhost:8080/tomcat-hikari-rest/books
 
 - Get all:
 curl -i -X GET http://localhost:8080/tomcat-dbcp-rest/books

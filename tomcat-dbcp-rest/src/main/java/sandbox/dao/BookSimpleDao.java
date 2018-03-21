@@ -1,4 +1,4 @@
-package sandbox.dbcp.utils;
+package sandbox.dao;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sandbox.pojo.Book;
+import sandbox.utils.ConnectionHelper;
 
 public class BookSimpleDao {
 
