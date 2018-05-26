@@ -1,5 +1,6 @@
 
  - Transparent Application Failover (TAF)
+   Implemented on OCI library level.
 
    srvctl add service
     - tafpolicy [ NONE | BASIC | PRECONNECT]
@@ -21,5 +22,40 @@
 
 PS: FAILOVER_TYPE=TRANSACTION is used by "Application Continuity for Java" and is supported by JDBC drivers
 
+
+ - Fast Application Notification (FAN)
+   Indenpendent from JDBC/OCI drivers.
+
+   srvctl add service
+    ...
+    - notification [TRUE| FALSE] #To enable FAN for JDBC/OCI/ODP.net connections
+     
+   ONS notifications are sent via dedicated port 6200. Use SimpleFan.jar to receive notifications about clusterware events.   
+
+
  - Fast Connection Failover (FCF)
- 
+   ucp.xml
+    fast-connection-failover-enabled="true"
+
+   - Implemented on UCP level
+   - Uses FAN events.
+   - Does not protect JDBC transactions nor JDBC connections after failure
+
+
+ - Application Continuity (AC) / Transaction Guard(TG)
+   Addresses temporary recoverable outages of instances, databases and network communications.
+   Implemented in thin JDBC drivers(AC)
+   Implemented on server side(TG)
+
+   srvctl add service
+    - failovertype TRANSACTION   # to enable Application Continuity
+    - commit_outcome TRUE        # to enable Transaction Guard
+    - retention 86400            # the number of seconds the commit outcome is retained
+    - replay_init_time 900       # seconds after which replay will not be initiated
+    - failoverretry 20
+    - failoverdelay 2
+    - notification TRUE          # with Oracle Restart, to avoid ORA-44781 during service start
+
+    oracle.jdbc.replay.OracleDataSourceImpl - records all information on JDBC driver side,
+    when SQLRecoverableException is thrown JDBC driver re-connects and replays the transaction.
+
