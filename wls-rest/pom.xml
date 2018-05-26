@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>wls-rest</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+  <parent>
+    <groupId>net.ibre5041</groupId>
+    <artifactId>ucptest-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>8.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- <dependency> -->
+    <!--   <groupId>com.oracle.weblogic</groupId> -->
+    <!--   <artifactId>weblogic-maven-plugin</artifactId> -->
+    <!--   <version>12.2.1-0-0</version> -->
+    <!--   <scope>provided</scope>       -->
+    <!-- </dependency> -->
+  </dependencies>
+
+  <build>
+    <finalName>wls-rest</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.oracle.weblogic</groupId>
+        <artifactId>weblogic-maven-plugin</artifactId>
+        <version>12.2.1-2-0</version>
+        <configuration>
+          <!-- <middlewareHome>${env.MW_HOME}</middlewareHome> -->
+          <!-- <domainHome>${env.MW_HOME}/user_projects/domains/mydomain</domainHome> -->
+          <adminurl>t3://localhost:7001</adminurl>
+          <user>weblogic</user>
+          <password>weblogic1</password>
+          <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+          <targets>AdminServer</targets>
+          <verbose>true</verbose>
+	  <remote>true</remote>
+	  <upload>true</upload>
+          <name>${project.build.finalName}</name>
+        </configuration>
+      </plugin>      
+    </plugins>
+  </build>
+
+</project>
