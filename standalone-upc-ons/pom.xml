@@ -14,12 +14,6 @@
   <dependencies>
 
     <dependency>
-      <groupId>net.ibre5041</groupId>
-      <artifactId>views</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.oracle.jdbc</groupId>
       <artifactId>ojdbc8</artifactId>
       <version>${oracle.version}</version>

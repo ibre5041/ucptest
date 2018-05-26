@@ -43,12 +43,6 @@
 
   <dependencies>
 
-    <dependency>
-      <groupId>net.ibre5041</groupId>
-      <artifactId>views</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    
     <!-- JAX-RS -->
     <dependency>
       <groupId>javax.ws.rs</groupId>

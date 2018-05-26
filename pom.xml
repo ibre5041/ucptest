@@ -28,6 +28,7 @@
     <module>standalone-web-client</module>
     <module>tomcat-dbcp-rest</module>
     <module>tomcat-monitor</module>
+    <module>wls-rest</module>
     <module>jboss-ds</module>
   </modules>
 
