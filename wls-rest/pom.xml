@@ -20,12 +20,12 @@
       <version>8.0</version>
       <scope>provided</scope>
     </dependency>
-    <!-- <dependency> -->
-    <!--   <groupId>com.oracle.weblogic</groupId> -->
-    <!--   <artifactId>weblogic-maven-plugin</artifactId> -->
-    <!--   <version>12.2.1-0-0</version> -->
-    <!--   <scope>provided</scope>       -->
-    <!-- </dependency> -->
+    <dependency>
+      <groupId>com.oracle.weblogic</groupId>
+      <artifactId>weblogic-maven-plugin</artifactId>
+      <version>12.2.1-2-0</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -34,10 +34,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.1.1</version>
-        <configuration>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
+        <version>3.2.2</version>
       </plugin>
       <plugin>
         <groupId>com.oracle.weblogic</groupId>
@@ -52,10 +49,18 @@
           <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
           <targets>AdminServer</targets>
           <verbose>true</verbose>
-	  <remote>true</remote>
+	  <remote>false</remote>
 	  <upload>true</upload>
           <name>${project.build.finalName}</name>
         </configuration>
+	<executions> 
+          <execution> 
+            <phase>install</phase> 
+            <goals> 
+              <goal>deploy</goal> 
+            </goals> 
+          </execution> 
+        </executions> 
       </plugin>      
     </plugins>
   </build>

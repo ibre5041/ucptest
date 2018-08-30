@@ -12,9 +12,7 @@ public class ConnectionHelper {
 	protected ConnectionHelper() {
 		try {
 			Context ctx = new InitialContext();
-			Context envContext = (Context) ctx.lookup("java:/comp/env");
-			// see context.xml mapping this name onto Resource defined in Tomcat's server.xml
-			m_pds = (DataSource) envContext.lookup ("jdbc/DataSource");
+			m_pds = (DataSource) ctx.lookup ("jdbc/ACTEST");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

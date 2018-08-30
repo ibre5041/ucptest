@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://xmlns.oracle.com/weblogic/weblogic-web-app http://http://www.oracle.com/technology/weblogic/weblogic-web-app/1.1/weblogic-web-app.xsd">
+
+	<resource-description>
+		<jndi-name>ACTEST</jndi-name>
+		<res-ref-name>jdbc/ACTEST</res-ref-name>
+	</resource-description>
+</weblogic-web-app>
