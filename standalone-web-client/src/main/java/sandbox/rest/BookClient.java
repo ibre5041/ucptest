@@ -8,8 +8,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-import com.sun.research.ws.wadl.Request;
-
 public class BookClient
 {
     public static void main( String[] args )
