@@ -14,6 +14,7 @@ headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
 # Replace with the correct URL
 url = "http://localhost:8080/tomcat-dbcp-rest/books/"
+url = "http://127.0.0.1:7001/wls-rest/resources/books"
 
 getAllResponse = requests.get(url, headers=headers)
 print (getAllResponse.status_code)
