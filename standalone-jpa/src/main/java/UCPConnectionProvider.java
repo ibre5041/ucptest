@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.ucp.UniversalConnectionPoolException;
 import oracle.ucp.admin.UniversalConnectionPoolManager;
@@ -90,10 +91,16 @@ public class UCPConnectionProvider extends DriverManagerConnectionProviderImpl {
 			tempval = (String) props.get(CONN_VALIDATE);
 			if (tempval != null)
 				pds.setValidateConnectionOnBorrow(Boolean.parseBoolean(tempval));
+			
+			UniversalConnectionPoolManager mgr = UniversalConnectionPoolManagerImpl.getUniversalConnectionPoolManager();
+			mgr.setLogLevel(Level.FINE);
+			
 			logger.finest("PoolDataSource initialized: " + pds);
 
 		} catch (SQLException sqlexc) {
 			logger.warning(getStackTraceString(sqlexc));
+		} catch (UniversalConnectionPoolException e) {
+			logger.warning(getStackTraceString(e));
 		}
 
 		if(pds == null)
