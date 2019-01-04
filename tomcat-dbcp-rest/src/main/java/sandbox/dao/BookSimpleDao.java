@@ -36,14 +36,14 @@ public class BookSimpleDao {
 	}
 
 	public List<Book> findByName(String name) {
-		String sql = "SELECT * FROM book as b WHERE UPPER(name) LIKE ? ORDER BY name";
+		String sql = "SELECT * FROM book WHERE UPPER(name) LIKE ? ORDER BY name";
 
 		List<Book> list = new ArrayList<Book>();
 
 		try (Connection conn = ConnectionHelper.getInstance().getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, "%" + name.toUpperCase() + "%");
-			try (ResultSet rs = ps.executeQuery(sql)) {
+			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					list.add(processRow(rs));
 				}
