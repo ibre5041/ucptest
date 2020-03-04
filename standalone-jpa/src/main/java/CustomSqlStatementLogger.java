@@ -151,11 +151,11 @@ public class CustomSqlStatementLogger extends SqlStatementLogger {
 	/**
 	 * Log a slow SQL query
 	 *
-	 * @param sql The SQL query.
+	 * @param message
 	 * @param startTime Start time in milliseconds.
 	 */
 	@AllowSysOut
-	public void logSlowQuery(String sql, long startTime) {
+	public void logSlowQuery(String message, long startTime) {
 		if ( logSlowQuery < 1 ) {
 			return;
 		}
@@ -166,7 +166,7 @@ public class CustomSqlStatementLogger extends SqlStatementLogger {
 		assert spent >= 0 : "startTime is invalid!";
 
 		if ( spent > logSlowQuery ) {
-			String logData = "SlowQuery: " + spent + " milliseconds. SQL_ID: '" + SQL_ID(sql) + "'";
+			String logData = "SlowQuery: " + spent + " milliseconds. SQL_ID: '" + message + "'";
 			LOG_SLOW.info( logData );
 			if ( logToStdout ) {
 				System.out.println( logData );
