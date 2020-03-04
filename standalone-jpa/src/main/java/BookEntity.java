@@ -5,6 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@org.hibernate.annotations.NamedQuery(
+		name = "Last Book"
+		, query = "from BookEntity where id = (select max(id) from BookEntity)"
+		)
+@org.hibernate.annotations.NamedQuery(
+		name = "Last Book slow"
+		, query = "from BookEntity where id = (select max(id) from BookEntity) and SLOW_NUMBER(10) = 10"
+		, timeout = 5
+		)
 @Entity
 @Table(name="BOOK")
 public class BookEntity {

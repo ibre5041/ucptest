@@ -10,6 +10,7 @@ import string
 import random
 import threading
 import logging
+import os
 
 logging.basicConfig(level=logging.CRITICAL,
                     format='[%(levelname)s] (%(threadName)-10s) %(message)s',
@@ -22,9 +23,12 @@ def updateAll():
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
     # Replace with the correct URL
-    url = "http://localhost:8080/tomcat-dbcp-rest/books/" # Tomcat
-    url = "http://127.0.0.1:7001/wls-rest/resources/books" # WebLogic
+    #url = "http://localhost:8080/tomcat-dbcp-rest/books/" # Tomcat
+    url = "http://localhost:8080/tomcat-dbcp-rest/books/"
+    url = "http://localhost:8080/tomcat-dbcp-rest/books/" # Tomcat - running from Eclipse
+    #url = "http://127.0.0.1:7001/wls-rest/resources/books" # WebLogic
 
+    os.environ['NO_PROXY'] = 'localhost'
     with requests.Session() as session:
         getAllResponse = session.get(url, headers=headers)
         print (getAllResponse.status_code)
@@ -55,7 +59,7 @@ def updateAll():
         
 
 threads = []
-for i in range(20):
+for i in range(10):
     t = threading.Thread(target=updateAll)
     threads.append(t)
     t.start()

@@ -74,6 +74,10 @@ public class UCPPoolCodeSampleMT {
 	private static final String ucpConfigURI = ucpConfig.toURI().toString();
 
 	public static void main(String args[]) throws Exception {
+		//Override system DNS setting with Google free DNS server
+		System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
+		System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
+		
 		// Java system property to specify the location of UCP XML configuration
 		// file which has shared pool, datasource properties defined in it.
 		System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);

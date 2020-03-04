@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Properties;
@@ -16,6 +17,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.spi.JdbcServices;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.hibernate.engine.jdbc.spi.SqlStatementLogger;
 
 /***************
  * 
@@ -35,6 +39,10 @@ public class AppHibernate
 	
     public static void main( String[] args ) throws Exception
     {
+		//Override system DNS setting
+		System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
+		System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
+    	
     	System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
     	
     	Logger.getLogger("oracle.ucp").setLevel(Level.FINEST);
@@ -57,6 +65,16 @@ public class AppHibernate
                 .configure() // configures settings from hibernate.cfg.xml
                 .addAnnotatedClass(BookEntity.class)
                 .buildSessionFactory();
+
+    	SqlStatementLogger sqlloger = sessionFactory.getSessionFactory().getJdbcServices().getSqlStatementLogger();
+    	SqlExceptionHelper exhelper = sessionFactory.getSessionFactory().getJdbcServices().getSqlExceptionHelper();
+    	JdbcServices jdbcservices = sessionFactory.getSessionFactory().getJdbcServices();
+    	    	
+    	Field field = jdbcservices.getClass().getDeclaredField("sqlStatementLogger");
+    	// Allow modification on the field
+    	field.setAccessible(true);
+    	// Sets the field to the new value for this instance
+    	field.set(jdbcservices, new CustomSqlStatementLogger(true, false, 1));
 
         Session session = sessionFactory.openSession();
         

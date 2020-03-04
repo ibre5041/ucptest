@@ -9,10 +9,10 @@
     See: ${CATATINA_HOME/conf/server.xml
     See: sandbox.utils.ConnectionHelper ... envContext.lookup	
     
-    Choosen connection pool name: 
+    Chosen connection pool name: 
     -->  
-    <ResourceLink auth="Container" global="jdbc/TomcatCP"  name="jdbc/DataSource" type="javax.sql.DataSource"/>
+    <!-- <ResourceLink auth="Container" global="jdbc/TomcatCP"  name="jdbc/DataSource" type="javax.sql.DataSource"/> -->
     <!-- <ResourceLink auth="Container" global="jdbc/DBCP2"     name="jdbc/DataSource" type="javax.sql.DataSource"/> -->
     <!-- <ResourceLink auth="Container" global="jdbc/HikariCP"  name="jdbc/DataSource" type="javax.sql.DataSource"/> --> 
-    <!-- <ResourceLink auth="Container" global="jdbc/UCPPoolFromContextXmlA  name="jdbc/DataSource" type="javax.sql.DataSource"/> -->    
+    <ResourceLink auth="Container" global="jdbc/UCPPoolFromContextXmlA"  name="jdbc/DataSource" type="javax.sql.DataSource"/>    
 </Context>

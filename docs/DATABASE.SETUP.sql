@@ -62,7 +62,7 @@ begin
 end;
 /
 
-CREATE OR REPLACE FUNCTION "ONSTEST"."SLOW" (n number)
+CREATE OR REPLACE FUNCTION "ONSTEST"."SLOW_NUMBER" (n number)
 return number
 as
 begin

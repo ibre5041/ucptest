@@ -36,7 +36,7 @@ public class BookSimpleDao {
 	}
 
 	public List<Book> findByName(String name) {
-		String sql = "SELECT * FROM book as b WHERE UPPER(name) LIKE ? ORDER BY name";
+		String sql = "SELECT * FROM book b WHERE UPPER(name) LIKE ? ORDER BY name";
 
 		List<Book> list = new ArrayList<Book>();
 

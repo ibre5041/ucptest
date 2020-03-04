@@ -24,7 +24,7 @@
       <groupId>com.oracle.weblogic</groupId>
       <artifactId>weblogic-maven-plugin</artifactId>
       <version>12.2.1-2-0</version>
-      <scope>provided</scope>
+      <!-- <scope>provided</scope> -->
     </dependency>
   </dependencies>
 

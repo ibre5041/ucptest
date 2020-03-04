@@ -1,3 +1,7 @@
+# TCP keepavlie howto for Oracle
+# (Ivan Brezina@dhl.com)
+#
+
 TCP Keepalive:
 http://tldp.org/HOWTO/TCP-Keepalive-HOWTO/overview.html
 
