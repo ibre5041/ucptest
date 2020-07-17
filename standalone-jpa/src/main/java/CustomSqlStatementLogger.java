@@ -195,6 +195,11 @@ public class CustomSqlStatementLogger extends SqlStatementLogger {
 					ParameterMetaData m = preparedStatement.getParameterMetaData();
 					String originalSql = preparedStatement.getOriginalSql();								
 
+					OracleLexer l = new OracleLexer(originalSql);
+					if (true) {
+						return l.getRevisedSql();			    	
+					}
+					
 					/* oracle.jdbc.driver.OraclePreparedStatementWrapper - internal in-accesible class */
 					Object statementWrapper = ((oracle.jdbc.replay.driver.TxnReplayableStatement) unwrapedStatement).getDelegateObj();
 					
