@@ -14,7 +14,6 @@ class OracleLexer {
 		this.out = new StringBuffer(stmt.length() + 64);
 	}
 
-
 	char peek() {
 		if (position < stmt.length()) {
 			return stmt.charAt(position);
@@ -35,6 +34,9 @@ class OracleLexer {
 		return r;
 	}
 
+	/**
+	 * Fetch Double quoted string from input: "abc"
+	 */
 	void consumeDQString() {
 		out.append(take()); // '"'
 		while (peek() != (char)0) {
@@ -47,6 +49,10 @@ class OracleLexer {
 		}			
 	}
 
+	
+	/**
+	 * Fetch Single quoted string from input: 'abc' '''a'''
+	 */
 	void consumeSQString() {
 		out.append(take()); // '\''
 		while (peek() != (char)0) {
@@ -63,6 +69,7 @@ class OracleLexer {
 	}
 
 	/**
+	 * Fetch Perl style quoted string
 	 * q'#Oracle's quote operator#'
 	 * q'[Oracle's quote operator]'
 	 */
@@ -75,7 +82,7 @@ class OracleLexer {
 		}
 
 		char stopMark = take();
-		out.append(stopMark); // '['
+		out.append(stopMark); // '[' '#'
 		if (stopMark == '<') { stopMark = '>'; }
 		if (stopMark == '{') { stopMark = '}'; }
 		if (stopMark == '[') { stopMark = ']'; }
@@ -93,6 +100,9 @@ class OracleLexer {
 
 	}
 
+	/**
+	 * Fetch Single-line comment: -- abc \r\n 
+	 */
 	void consumeSLComment() {
 		out.append(take()); // '-'
 		out.append(take()); // '-'
@@ -100,11 +110,14 @@ class OracleLexer {
 			if (peek() == '\n' || peek() == '\r') {
 				break;
 			} else {
-				out.append(take()); // '-'
+				out.append(take());
 			}
 		}
 	}
 
+	/**
+	 * Fetch Multi-line comment
+	 */
 	void consumeMLComment() {
 		out.append(take()); // '/'
 		out.append(take()); // '*'
@@ -120,6 +133,9 @@ class OracleLexer {
 		}
 	}
 
+	/**
+	 * Fetch JDBC style bind variable placeholder, and replace it with enumerated one  
+	 */
 	void consumeBind() {
 		take(); // '?'
 		out.append(':');
@@ -127,22 +143,32 @@ class OracleLexer {
 		out.append(String.valueOf(' ')); // every named bind has to be followed by space - just for sure
 	}
 
+	/**
+	 * Fetch any other character 
+	 */
 	void consumeCharacter() {
 		out.append(take());
 	}
 
+	/**
+	 * Process whole SQL string through primitive Lexer. Return transformed SQL
+	 * @return Transformed SQL, having '?' replaced with enumerated Binds
+	 */
 	public String getRevisedSql() {
+		/* Iterate through whole input SQL */
 		while (peek() != (char)0) {
-
 			switch (peek()) {
+			// Double quoted string was found
 			case '"':
 				consumeDQString();
 				break;
 
+			// Single quoted string was found
 			case '\'':
 				consumeSQString();
 				break;
 
+			// Perl style string was found - or just pure character
 			case 'q':
 			case 'Q':
 				if (peekNext() == '\'') {
@@ -152,6 +178,7 @@ class OracleLexer {
 				}
 				break;
 
+			// Single-line comment was found - or just pure dash 
 			case '-':
 				if (peekNext() == '-') {
 					consumeSLComment();
@@ -160,6 +187,7 @@ class OracleLexer {
 				}
 				break;
 
+			// Double-line comment was found - or just pure slash
 			case '/':
 				if (peekNext() == '*') {
 					consumeMLComment();
@@ -168,10 +196,12 @@ class OracleLexer {
 				}
 				break;
 
+			// Bind variable was found - but outside String or Comment
 			case '?':
 				consumeBind();
 				break;
 
+			// Match any other character
 			default:
 				consumeCharacter();
 			}
