@@ -38,7 +38,7 @@
 	  <arguments>
 	    <argument>-classpath</argument>
 	    <classpath />
-	    <argument>App</argument>
+	    <argument>AppJPA</argument>
 	  </arguments>
 	</configuration>
       </plugin>
@@ -61,23 +61,31 @@
     </dependency>
 
     <dependency>
-      <groupId>com.oracle.jdbc</groupId>
-      <artifactId>ojdbc8</artifactId>
-      <version>${oracle.version}</version>
-      <scope>provided</scope>          
+      <groupId>com.oracle.database.jdbc</groupId>
+      <artifactId>ojdbc8-production</artifactId>
+      <version>19.7.0.0</version>
+      <type>pom</type>  
     </dependency>
 
     <dependency>
-      <groupId>com.oracle.jdbc</groupId>
+      <groupId>com.oracle.database.jdbc</groupId>
       <artifactId>ucp</artifactId>
-      <version>${oracle.version}</version>
-      <scope>provided</scope>		  
+      <version>19.7.0.0</version>
+      <type>pom</type>
     </dependency>
-
+    
     <dependency>
-      <groupId>com.oracle.jdbc</groupId>
+      <groupId>com.oracle.database.ha</groupId>
       <artifactId>ons</artifactId>
       <version>${oracle.version}</version>
+      <type>pom</type>      
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit-dep</artifactId>
+      <version>[4.8.2,)</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
