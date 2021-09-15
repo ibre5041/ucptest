@@ -57,4 +57,29 @@
     </dependency>
     
   </dependencies>
+
+  <build>
+    <finalName>standalone-web-client</finalName>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <configuration>
+          <executable>java</executable>
+          <classpathScope>compile</classpathScope>
+          <addResourcesToClasspath>true</addResourcesToClasspath>
+          <arguments>
+            <argument>-classpath</argument>
+            <classpath />
+            <argument>sandbox.rest.BookClientMT</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+      
+    </plugins>
+  </build>
+    
 </project>
