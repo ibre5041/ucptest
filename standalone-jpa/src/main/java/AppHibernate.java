@@ -39,9 +39,9 @@ public class AppHibernate
 	
     public static void main( String[] args ) throws Exception
     {
-		//Override system DNS setting
-		System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
-		System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
+	//Override system DNS setting
+	////System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
+	////System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
     	
     	System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
     	

@@ -25,16 +25,16 @@ import javax.transaction.Transaction;
  */
 public class AppJPA 
 {	
-	// UCP XML config file location URI
-	private static File ucpConfig = new File(AppJPA.class.getClassLoader().getResource("ucp.xml").getFile());
-	private static File l4jConfig = new File(AppJPA.class.getClassLoader().getResource("logging.properties").getFile());
-	private static final String ucpConfigURI = ucpConfig.toURI().toString();
-	
+    // UCP XML config file location URI
+    private static File ucpConfig = new File(AppJPA.class.getClassLoader().getResource("ucp.xml").getFile());
+    private static File l4jConfig = new File(AppJPA.class.getClassLoader().getResource("logging.properties").getFile());
+    private static final String ucpConfigURI = ucpConfig.toURI().toString();
+
     public static void main( String[] args ) throws Exception
     {
-		//Override system DNS setting
-		System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
-		System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
+	//Override system DNS setting
+	////System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
+	////System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
     	
     	System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
     	
