@@ -19,6 +19,8 @@ import sandbox.fan.SimpleFan;
 import java.sql.ResultSet;
 import oracle.jdbc.OracleDriver;
 
+import java.lang.Thread;
+
 /***************
  * 
  * Sample standalone application UCP
@@ -89,7 +91,7 @@ public class UCPTest {
 		pds.setFastConnectionFailoverEnabled(true);
 
 		// use srvctl config nodeapps to get the ONS ports on the cluster
-		pds.setONSConfiguration(props.getProperty("onsnodes"));
+		//pds.setONSConfiguration(props.getProperty("onsnodes"));
 
 		System.out.println("pool configured, trying to get a connection");
 
@@ -132,6 +134,9 @@ public class UCPTest {
 
 		System.out.println(((oracle.ucp.jdbc.oracle.OracleJDBCConnectionPoolStatistics)pds.getStatistics()).getFCFProcessingInfo());
 
+		System.out.println("Sleeping");
+		Thread.sleep(10000);
+		
 		cstmt.close();
 		conn.close();
 		conn = null;

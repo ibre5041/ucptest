@@ -91,7 +91,8 @@
 	  <arguments>
 	    <argument>-classpath</argument>
 	    <classpath />
-	    <argument>-Djava.util.logging.file=src/main/resources/logging.properties</argument>
+	    <!-- <argument>-Djava.util.logging.file=src/main/resources/logging.properties</argument> -->
+	    <argument>-Djava.util.logging.file=logging.properties</argument>
 	    <argument>sandbox.ucp.UCPTest</argument>
 	  </arguments>
 	</configuration>
