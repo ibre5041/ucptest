@@ -10,6 +10,6 @@
     <property name="hibernate.ucp.dataSourceFromConfiguration">UCPPoolFromUcpXmlA</property>
     <property name="hibernate.dialect">org.hibernate.dialect.Oracle12cDialect</property>
 	<property name="hibernate.show_sql">true</property>
-	<property name="hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS">2</property>    
+	<property name="hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS">30</property>
   </session-factory>
 </hibernate-configuration>
