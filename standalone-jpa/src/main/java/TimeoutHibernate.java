@@ -29,12 +29,6 @@ import org.hibernate.engine.jdbc.spi.SqlStatementLogger;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 /***************
  * 
  * Sample standalone application UCP + Hibernate, Query timeout
@@ -56,101 +50,6 @@ public class TimeoutHibernate
 	
     private static Session session;
     private Transaction transaction;
-    
-    @BeforeClass
-    public static void setUpClass() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		//Override system DNS setting with Google free DNS server
-		System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
-		System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
-    	
-    	System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
-    	
-    	Logger.getLogger("oracle.ucp").setLevel(Level.FINEST);
-    	Logger.getLogger("oracle.ucp.jdbc.PoolDataSource").setLevel(Level.FINEST);
-    	
-    	SessionFactory sessionFactory = new Configuration()        	
-                .configure() // configures settings from hibernate.cfg.xml
-                .addAnnotatedClass(BookEntity.class)
-                .buildSessionFactory();
-
-    	SqlStatementLogger sqlloger = sessionFactory.getSessionFactory().getJdbcServices().getSqlStatementLogger();
-    	SqlExceptionHelper exhelper = sessionFactory.getSessionFactory().getJdbcServices().getSqlExceptionHelper();
-    	JdbcServices jdbcservices = sessionFactory.getSessionFactory().getJdbcServices();
-    	
-    	
-    	Field field = jdbcservices.getClass().getDeclaredField("sqlStatementLogger");
-    	// Allow modification on the field
-    	field.setAccessible(true);
-    	// Sets the field to the new value for this instance
-    	field.set(jdbcservices, new CustomSqlStatementLogger());
-//    	SessionFactoryImpl sessionFactory = (SessionFactoryImpl) getSessionFactory();
-//        try {
-//            Settings settings = sessionFactory.getSettings();
-//            Method declaredMethod = settings.getClass().getDeclaredMethod(&quot;setSqlStatementLogger&quot;, new Class[] {SQLStatementLogger.class});
-//            declaredMethod.setAccessible(true);
-//            declaredMethod.invoke(settings, new SQLLogger());
-//        } catch (SecurityException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IllegalArgumentException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-// 
-//    }
- 
-    	
-        session = sessionFactory.openSession();
-    }
-
-    @Before
-    public void setUp() throws IOException {
-        transaction = session.beginTransaction();
-        transaction.commit();
-        transaction = session.beginTransaction();
-    }
-    
-
-    @After
-    public void tearDown() {
-        if(transaction.isActive()) {
-            transaction.rollback();
-        }
-    }
-
-    @Test
-    public void lastBookFast() {
-        Query<BookEntity> query = session.createNamedQuery("Last Book", BookEntity.class);
-        BookEntity result = query.getSingleResult();
-        System.out.println(result);
-        Assert.assertTrue(true);
-    }
-
-    @Test
-    public void lastBookSlow() {
-        Query<BookEntity> query = session.createNamedQuery("Last Book slow", BookEntity.class);
-        try {
-        	BookEntity result = query.getSingleResult();
-        	Assert.fail();
-        } catch (QueryTimeoutException e) {
-        	String sql = sqlFromException(e);
-        	String sqlid = sqlid(sql);
-        	System.err.println("SQL exection timed out:");
-        	System.err.println("sql_id: " + sqlid);
-        	System.err.println("sql: " + sql);
-        	e.printStackTrace();
-        	Assert.assertTrue(true);
-        }
-    }
 
     // Iterate over Exceptions causes. try to find "oracle.jdbc.OracleDatabaseException" class and call getSql/getOriginalSql on it
     private static String sqlFromException(Throwable t)
