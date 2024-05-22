@@ -77,9 +77,8 @@ public class AppHibernate
     	field.set(jdbcservices, new CustomSqlStatementLogger(true, false, 1));
 
         Session session = sessionFactory.openSession();
-        
-        Transaction tx = session.beginTransaction();        
-        
+
+        Transaction tx = session.beginTransaction();
         for(int i = 0; i < 100000; i++)
         {
         	BigDecimal randomId = new BigDecimal(i + /*Math.random() * */ 1000000000 + 1000000000).setScale(0, RoundingMode.FLOOR);
@@ -94,6 +93,7 @@ public class AppHibernate
         	book.setAuthor("Hello world task author");        		
         	System.out.println("Inserting:("+i+")" + book.toString());
         	session.persist(book);
+			session.flush();
         }
         tx.commit();
         session.close();
