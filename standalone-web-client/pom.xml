@@ -1,85 +1,85 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>standalone-web-client</artifactId>
-  <packaging>jar</packaging>
+    <artifactId>standalone-web-client</artifactId>
+    <packaging>jar</packaging>
 
-  <parent>
-    <groupId>net.ibre5041</groupId>
-    <artifactId>ucptest-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>net.ibre5041</groupId>
+        <artifactId>ucptest-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-  <dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.glassfish.jersey</groupId>
+                <artifactId>jersey-bom</artifactId>
+                <version>${jersey2.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-      <dependency>
-	<groupId>org.glassfish.jersey</groupId>
-	<artifactId>jersey-bom</artifactId>
-	<version>${jersey2.version}</version>
-	<type>pom</type>
-	<scope>import</scope>
-      </dependency>
+
+        <!-- JAX-RS -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${jaxrs.version}</version>
+        </dependency>
+
+        <!-- Jersey Client-->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+
+        <!-- Jersey Validation -->
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-bean-validation</artifactId>
+        </dependency>
+        <!-- JSON library -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+        </dependency>
+
+        <!-- needed for Jersey 2.26 and later -->
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+        </dependency>
+
     </dependencies>
-  </dependencyManagement>
 
-  <dependencies>
+    <build>
+        <finalName>standalone-web-client</finalName>
 
-    <!-- JAX-RS -->
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-      <version>${jaxrs.version}</version>
-    </dependency>
-    
-    <!-- Jersey Client-->
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-client</artifactId>
-    </dependency>
-    
-    <!-- Jersey Validation -->
-    <dependency>
-      <groupId>org.glassfish.jersey.ext</groupId>
-      <artifactId>jersey-bean-validation</artifactId>
-    </dependency>
-    <!-- JSON library -->
-    <dependency>
-      <groupId>org.glassfish.jersey.media</groupId>
-      <artifactId>jersey-media-json-jackson</artifactId>
-    </dependency>
+        <plugins>
 
-    <!-- needed for Jersey 2.26 and later -->
-    <dependency>
-      <groupId>org.glassfish.jersey.inject</groupId>
-      <artifactId>jersey-hk2</artifactId>      
-    </dependency>
-    
-  </dependencies>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <executable>java</executable>
+                    <classpathScope>compile</classpathScope>
+                    <addResourcesToClasspath>true</addResourcesToClasspath>
+                    <arguments>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>sandbox.rest.BookClientMT</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
 
-  <build>
-    <finalName>standalone-web-client</finalName>
+        </plugins>
+    </build>
 
-    <plugins>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
-        <configuration>
-          <executable>java</executable>
-          <classpathScope>compile</classpathScope>
-          <addResourcesToClasspath>true</addResourcesToClasspath>
-          <arguments>
-            <argument>-classpath</argument>
-            <classpath />
-            <argument>sandbox.rest.BookClientMT</argument>
-          </arguments>
-        </configuration>
-      </plugin>
-      
-    </plugins>
-  </build>
-    
 </project>
