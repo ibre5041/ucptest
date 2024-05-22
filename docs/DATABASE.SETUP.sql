@@ -74,3 +74,6 @@ end;
 show errors
 
 -- srvctl add service -db INFRADB -service ACTEST -preferred INFRADB1 -available INFRADB2 -policy automatic -failovertype TRANSACTION -clbgoal SHORT -rlbgoal SERVICE_TIME -notification true -commit_outcome TRUE
+-- srvctl add service -db TEST19C_1 -service ACTEST -preferred TEST19C1 -available TEST19C2 -policy automatic -failovertype TRANSACTION -clbgoal SHORT -rlbgoal SERVICE_TIME -notification true -commit_outcome TRUE
+-- srvctl start service -db TEST19C_1 -service ACTEST
+-- srvctl relocate service -db TEST19C_1 -service ACTEST
