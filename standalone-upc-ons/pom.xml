@@ -11,6 +11,46 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <build>
+        <finalName>standalone-upc-ons</finalName>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <executable>java</executable>
+                    <classpathScope>compile</classpathScope>
+                    <addResourcesToClasspath>true</addResourcesToClasspath>
+                    <arguments>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <!-- <argument>-Djava.util.logging.file=src/main/resources/logging.properties</argument> -->
+                        <argument>-Djava.util.logging.file=logging.properties</argument>
+                        <argument>sandbox.ucp.UCPTest</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>sandbox.ucp.UCPTest</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
     <dependencies>
 
         <dependency>
@@ -74,31 +114,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <finalName>standalone-upc-ons</finalName>
-
-        <plugins>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <configuration>
-                    <executable>java</executable>
-                    <classpathScope>compile</classpathScope>
-                    <addResourcesToClasspath>true</addResourcesToClasspath>
-                    <arguments>
-                        <argument>-classpath</argument>
-                        <classpath/>
-                        <!-- <argument>-Djava.util.logging.file=src/main/resources/logging.properties</argument> -->
-                        <argument>-Djava.util.logging.file=logging.properties</argument>
-                        <argument>sandbox.ucp.UCPTest</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-
-        </plugins>
-    </build>
 
 </project>
