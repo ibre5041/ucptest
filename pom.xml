@@ -10,7 +10,7 @@
 
   <properties>
     <tomcat.version>8.5.5</tomcat.version>
-    <jersey2.version>2.26</jersey2.version>
+    <jersey2.version>2.43</jersey2.version>
     <jaxrs.version>2.1</jaxrs.version>
     <hibernate.version>5.4.12.Final</hibernate.version>
     
