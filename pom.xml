@@ -32,6 +32,7 @@
     <module>tomcat-monitor</module>
     <!-- <module>wls-rest</module> -->
     <module>jboss-ds</module>
+    <!--<module>SpringBootApp</module>-->
   </modules>
 
   <!-- <repositories> -->
