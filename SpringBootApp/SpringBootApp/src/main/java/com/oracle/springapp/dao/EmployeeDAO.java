@@ -12,7 +12,7 @@ import org.springframework.retry.annotation.Retryable;
  */
 public interface EmployeeDAO {
 	public List<Employee> getAllEmployees();
-	public Employee getEmployee();
+	public Employee getEmployee(Integer empno);
 
 	void insertEmployee(Employee employee);
 }

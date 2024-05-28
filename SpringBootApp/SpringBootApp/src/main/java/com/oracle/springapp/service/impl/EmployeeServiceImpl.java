@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 */
 	@Override
 	public Employee displayEmployee(Integer empno){
-		Employee employee = employeeDao.getEmployee();
+		Employee employee = employeeDao.getEmployee(empno);
 
 //		System.out.println(String.format("%20s %20s %20s %20s %20s %20s %20s %20s \n",
 //				employees.size(), "EMPNO", "ENAME", "JOB", "MGR", "HIREDATE", "SALARY", "COMM", "DEPT"));

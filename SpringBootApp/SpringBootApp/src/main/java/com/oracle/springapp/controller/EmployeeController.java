@@ -53,10 +53,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getAllEmployee(@PathVariable String id) {
+    public ResponseEntity<Employee> getAllEmployee(@PathVariable Integer id) {
         try {
-            List<Employee> employee = employeeService.displayEmployees();
-            return ResponseEntity.ok(employee.get(0));
+            Employee employee = employeeService.displayEmployee(id);
+            return ResponseEntity.ok(employee);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         }

@@ -51,15 +51,15 @@ public class EmployeeDAOImpl extends JdbcDaoSupport implements EmployeeDAO {
 	}
 
 	@Override
-	public List<Employee> getEmployee(Integer empno) {
+	public Employee getEmployee(Integer empno) {
 		final String sql =
 		"""
-		SELECT empno, ename, job, mgr, hiredate, sal, comm, SLOW_NUMBER1(deptno) as deptno
+		SELECT empno, ename, job, mgr, hiredate, sal, comm, deptno
 		FROM emp
-		where empno = SLOW_NUMBER1(:empno)
+		where empno = SLOW_NUMBER1(?)
 		""";
 		SqlParameterSource parameters = new MapSqlParameterSource("empno", empno);
-		return getJdbcTemplate().query(sql,
+		List<Employee> employees = getJdbcTemplate().query(sql,
 				(rs, rowNum) -> new Employee(rs.getInt("empno"),
 						rs.getString("ename"),
 						rs.getString("job"),
@@ -68,7 +68,11 @@ public class EmployeeDAOImpl extends JdbcDaoSupport implements EmployeeDAO {
 						rs.getInt("sal"),
 						rs.getInt("comm"),
 						rs.getInt("deptno")
-				));
+				), empno/*, parameters*/);
+		if(!employees.isEmpty())
+			return employees.get(0);
+		else
+			return null;
 	}
 
 	@Override

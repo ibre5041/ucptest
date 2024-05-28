@@ -25,6 +25,6 @@ public class CustomRetryListener implements RetryListener {
     @Override
     public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
         logger.error("Error occurred during retry operation for: {}. Attempt: {}",
-                context.getAttribute(RetryContext.NAME), context.getRetryCount(), throwable);
+                context.getAttribute(RetryContext.NAME), context.getRetryCount());
     }
 }
