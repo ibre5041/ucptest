@@ -3,6 +3,7 @@ package com.oracle.springapp.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.stereotype.Service;
 
 import com.oracle.springapp.model.Employee;
@@ -45,6 +46,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void insertEmployee(Employee employee) {
 		employeeDao.insertEmployee(employee);	
 	}
-	
-	
+
+	@Override
+	public Employee displayEmployeeFallback(ConcurrencyFailureException e, Integer empno) {
+		return null;
+	}
 }
