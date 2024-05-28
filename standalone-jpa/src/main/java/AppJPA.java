@@ -26,9 +26,10 @@ import javax.transaction.Transaction;
 public class AppJPA 
 {	
     // UCP XML config file location URI
-    private static File ucpConfig = new File(AppJPA.class.getClassLoader().getResource("ucp.xml").getFile());
     private static File l4jConfig = new File(AppJPA.class.getClassLoader().getResource("logging.properties").getFile());
-    private static final String ucpConfigURI = ucpConfig.toURI().toString();
+	private static File ucpConfig = new File(AppJPA.class.getClassLoader().getResource("ucp.xml").getFile());
+
+	private static final String ucpConfigURI = ucpConfig.toURI().toString();
 
     public static void main( String[] args ) throws Exception
     {
