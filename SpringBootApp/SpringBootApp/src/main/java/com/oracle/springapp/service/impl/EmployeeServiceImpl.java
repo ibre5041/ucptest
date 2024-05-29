@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.retry.support.RetryTemplate;
@@ -27,9 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @return
 	 */
 	@Override
-	@Retryable(
-			//interceptor = "retryInterceptor",
-			retryFor = {ConcurrencyFailureException.class}
+	@Retryable(/*interceptor = "retryInterceptor",*/ retryFor = {ConcurrencyFailureException.class}
 	)
 	public List<Employee> displayEmployees(){
 		List<Employee> employees = employeeDao.getAllEmployees();
@@ -42,6 +41,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @return
 	 */
 	@Override
+	@Retryable(/*interceptor = "retryInterceptor",*/ retryFor = {ConcurrencyFailureException.class}
+	)
 	public Employee displayEmployee(Integer empno){
 		Employee employee = employeeDao.getEmployee(empno);
 
@@ -52,12 +53,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	@Recover
+	public Employee displayEmployeeFallback(ConcurrencyFailureException e, Integer empno) {
+		return null;
+	}
+
+	@Override
+	@Retryable(retryFor = {ConcurrencyFailureException.class})
 	public void insertEmployee(Employee employee) {
 		employeeDao.insertEmployee(employee);	
 	}
 
-	@Override
-	public Employee displayEmployeeFallback(ConcurrencyFailureException e, Integer empno) {
-		return null;
-	}
 }
