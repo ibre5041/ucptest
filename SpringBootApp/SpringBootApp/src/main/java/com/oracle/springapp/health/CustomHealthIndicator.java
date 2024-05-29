@@ -72,7 +72,7 @@ public class CustomHealthIndicator implements ReactiveHealthIndicator {
             pool = manager.getConnectionPool(pools[0]);
             Integer max = pool.getMaxPoolSize();
             Integer bor = pool.getBorrowedConnectionsCount();
-            if(bor+1 <= max) {
+            if(bor+1 >= max) {
                 return Mono.just(Health
                         .outOfService()
                         .withDetail("maxPoolSize", max)
