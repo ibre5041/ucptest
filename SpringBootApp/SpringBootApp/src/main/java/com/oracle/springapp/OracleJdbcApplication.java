@@ -17,10 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement(proxyTargetClass = true)
 public class OracleJdbcApplication /*implements CommandLineRunner*/ {
-
-    @Autowired
-    EmployeeService employeeService;
-    
 	public static void main(String[] args) {
 		SpringApplication.run(OracleJdbcApplication.class, args);
 	}
