@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.retry.support.RetryTemplate;
 
 import com.oracle.springapp.model.Employee;
 import com.oracle.springapp.service.EmployeeService;
@@ -16,12 +18,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeDAO employeeDao;
 
+	@Autowired
+	private RetryTemplate retryTemplate;
+
 	/**
 	 * Displays the Employees from the EMP table
 	 *
 	 * @return
 	 */
 	@Override
+	@Retryable(
+			//interceptor = "retryInterceptor",
+			retryFor = {ConcurrencyFailureException.class}
+	)
 	public List<Employee> displayEmployees(){
 		List<Employee> employees = employeeDao.getAllEmployees();
 		return employees;

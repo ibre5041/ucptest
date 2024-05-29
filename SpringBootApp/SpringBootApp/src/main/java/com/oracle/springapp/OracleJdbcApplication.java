@@ -1,16 +1,12 @@
 package com.oracle.springapp;
 
-import java.sql.Date;
-import java.util.Scanner;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.retry.annotation.EnableRetry;
 
-import com.oracle.springapp.model.Employee;
 import com.oracle.springapp.service.EmployeeService;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * SpringBoot application main class. It uses JdbcTemplate class which
@@ -19,6 +15,7 @@ import com.oracle.springapp.service.EmployeeService;
  */
 @EnableRetry
 @SpringBootApplication
+@EnableTransactionManagement(proxyTargetClass = true)
 public class OracleJdbcApplication /*implements CommandLineRunner*/ {
 
     @Autowired
@@ -27,25 +24,4 @@ public class OracleJdbcApplication /*implements CommandLineRunner*/ {
 	public static void main(String[] args) {
 		SpringApplication.run(OracleJdbcApplication.class, args);
 	}
-
-//	@Override
-//	public void run(String... args) throws Exception {
-//		System.out.println("List of employees");
-//		// Displays the list of employees from EMP table
-//		employeeService.displayEmployees();
-//		// Insert a new employee into EMP table
-//		employeeService.insertEmployee(new Employee(7954,"TAYLOR","MANAGER",7839, Date.valueOf("2020-03-20"),5300,0,10));
-//		System.out.println("List of Employees after the update");
-//		// Displays the list of employees after a new employee record is inserted
-//		employeeService.displayEmployees();
-//
-//		Scanner s = new Scanner(System.in);
-//		System.out.println("Press enter to continue.....");
-//		s.nextLine();
-//
-//		while(true) {
-//			employeeService.displayEmployees();
-//		}
-//	}
-
 }

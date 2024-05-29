@@ -7,7 +7,13 @@ import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import oracle.ucp.jdbc.PoolDataSourceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -24,15 +30,26 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Repository
-public class EmployeeDAOImpl extends JdbcDaoSupport implements EmployeeDAO {
-	
+public class EmployeeDAOImpl extends JdbcDaoSupport
+		implements EmployeeDAO
+//		, InitializingBean
+//		, DisposableBean
+	{
+	private static final Logger log = LoggerFactory.getLogger(EmployeeDAOImpl.class);
+
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+
 	@PostConstruct
 	public void initialize() {
+		DataSource d = this.getDataSource();
 		setDataSource(dataSource);
-		System.out.println("Datasource used: " + dataSource);
+		String name = dataSource.getClass().getCanonicalName();
+		oracle.ucp.jdbc.PoolDataSourceImpl ucp = (PoolDataSourceImpl)dataSource;
+		log.info("Datasource used: {}", dataSource);
 	}
 
 	@Override

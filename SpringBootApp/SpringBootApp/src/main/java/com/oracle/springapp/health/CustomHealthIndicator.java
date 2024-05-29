@@ -14,6 +14,7 @@ import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
+import javax.sql.DataSource;
 import java.lang.management.ManagementFactory;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -26,6 +27,9 @@ public class CustomHealthIndicator implements HealthIndicator {
 
     private boolean isHealthy = false;
     UniversalConnectionPool pool;
+
+    @Autowired
+    private DataSource dataSource;
 
     public CustomHealthIndicator() {
 

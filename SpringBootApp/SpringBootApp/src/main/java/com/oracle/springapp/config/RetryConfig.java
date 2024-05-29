@@ -1,14 +1,18 @@
 package com.oracle.springapp.config;
 
 import com.oracle.springapp.retry.CustomRetryPolicy;
+import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.interceptor.RetryInterceptorBuilder;
+import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 import org.springframework.retry.support.RetryTemplate;
 
-@EnableRetry
+//@EnableRetry
 @Configuration
 public class RetryConfig {
 
@@ -22,15 +26,13 @@ public class RetryConfig {
     public RetryTemplate retryTemplate() {
         RetryTemplate retryTemplate = new RetryTemplate();
 
-        FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
-        backOffPolicy.setBackOffPeriod(backoffInMillis);
-        retryTemplate.setBackOffPolicy(backOffPolicy);
-
-        CustomRetryPolicy retryPolicy = new CustomRetryPolicy(maxAttempts);
-        retryTemplate.setRetryPolicy(retryPolicy);
+//        FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
+//        backOffPolicy.setBackOffPeriod(backoffInMillis);
+//        retryTemplate.setBackOffPolicy(backOffPolicy);
+//        CustomRetryPolicy retryPolicy = new CustomRetryPolicy(maxAttempts);
+//        retryTemplate.setRetryPolicy(retryPolicy);
 
         retryTemplate.registerListener(new CustomRetryListener());
-
         return retryTemplate;
     }
 }

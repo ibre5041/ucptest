@@ -14,28 +14,28 @@ public interface EmployeeService {
 	 *
 	 * @return List<Employee>
 	 */
-	@Retryable(
-			retryFor = {ConcurrencyFailureException.class},
-			maxAttempts = 6, // Retry up to x times
-			backoff = @Backoff(delay = 5000)) // Wait 5 second between retries
+//	@Retryable(
+//			retryFor = {ConcurrencyFailureException.class},
+//			maxAttempts = 6, // Retry up to x times
+//			backoff = @Backoff(delay = 5000)) // Wait 5 second between retries
 	public List<Employee> displayEmployees();
 
-	@Retryable(
-			retryFor = {ConcurrencyFailureException.class},
-			maxAttempts = 6, // Retry up to x times
-			backoff = @Backoff(delay = 5000)) // Wait 5 second between retries
+//	@Retryable(
+//			retryFor = {ConcurrencyFailureException.class},
+//			maxAttempts = 6, // Retry up to x times
+//			backoff = @Backoff(delay = 5000)) // Wait 5 second between retries
 	public Employee displayEmployee(Integer empno);
 
-	@Recover
+//	@Recover
 	public Employee displayEmployeeFallback(ConcurrencyFailureException e, Integer empno);
 
 	/**
 	 * Create a new employee record
 	 */
-	@Retryable(
-			retryFor = {ConcurrencyFailureException.class},
-			maxAttempts = 6, // Retry up to x times
-			backoff = @Backoff(delay = 5000)) // Wait 5 second between retries
+//	@Retryable(
+//			retryFor = {ConcurrencyFailureException.class},
+//			maxAttempts = 6, // Retry up to x times
+//			backoff = @Backoff(delay = 5000)) // Wait 5 second between retries
 	public void insertEmployee(Employee employee);
 
 
