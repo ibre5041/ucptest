@@ -58,7 +58,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.6.6</version>
+        </dependency>
         <!--
                 <dependency>
                     <groupId>com.oracle.database.jdbc</groupId>

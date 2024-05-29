@@ -8,7 +8,10 @@ import oracle.ucp.admin.UniversalConnectionPoolManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.stereotype.Component;
+import org.springframework.boot.actuate.autoconfigure.health.ConditionalOnEnabledHealthIndicator;
+import reactor.core.publisher.Mono;
 
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
@@ -23,7 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 
 @Component
-public class CustomHealthIndicator implements HealthIndicator {
+@ConditionalOnEnabledHealthIndicator("custom")
+public class CustomHealthIndicator implements ReactiveHealthIndicator {
 
     private boolean isHealthy = false;
     UniversalConnectionPool pool;
@@ -57,21 +61,28 @@ public class CustomHealthIndicator implements HealthIndicator {
     }
 
     @Override
-    public Health health() {
+    public Mono<Health> health() {
         try {
             UniversalConnectionPoolManager manager = UniversalConnectionPoolManagerImpl.getUniversalConnectionPoolManager();
             manager.setJmxEnabled(true);
             String[] pools = manager.getConnectionPoolNames();
             if (pools.length == 0) {
-                return Health.down().build();
+                return Mono.just(Health.down().build());
             }
             pool = manager.getConnectionPool(pools[0]);
             Integer max = pool.getMaxPoolSize();
             Integer bor = pool.getBorrowedConnectionsCount();
-            if(bor+1 >= max) {
-                return Health.down().build();
+            if(bor+1 <= max) {
+                return Mono.just(Health
+                        .outOfService()
+                        .withDetail("maxPoolSize", max)
+                        .withDetail("borrowedConnections", bor)
+                        .build());
             } else {
-                return Health.up().build();
+                return Mono.just(Health.up()
+                        .withDetail("maxPoolSize", max)
+                        .withDetail("borrowedConnections", bor)
+                        .build());
             }
         } catch (UniversalConnectionPoolException ex) {
             throw new RuntimeException(ex);
