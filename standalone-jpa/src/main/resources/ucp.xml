@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ucp-properties>
+  <!-- url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=rac19-b-scan.prod.vmware.haf)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))" -->
+  <!-- url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(CONNECT_TIMEOUT=5)(RETRY_COUNT=20)(RETRY_DELAY=5)(FAILOVER=ON)(LOAD_BALANCE=off)(ADDRESS=(PROTOCOL=TCP)(HOST=lbrezinai05)(PORT=25881))(ADDRESS=(PROTOCOL=TCP)(HOST=lbrezinai06)(PORT=25881))(CONNECT_DATA=(SERVICE_NAME=actest.MERCK)))" -->
+
   <connection-pool
       connection-pool-name="UCPPOOL"
       connection-factory-class-name="oracle.jdbc.replay.OracleDataSourceImpl"
-      url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(TRANSPORT_CONNECT_TIMEOUT=90)(RETRY_COUNT=20)(FAILOVER=ON)(ADDRESS=(PROTOCOL=TCP)(HOST=rac19-b-scan.prod.vmware.haf)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ACTEST)))"
+      url="jdbc:oracle:thin:@(DESCRIPTION=(ENABLE=BROKEN)(CONNECT_TIMEOUT=5)(RETRY_COUNT=20)(RETRY_DELAY=5)(FAILOVER=ON)(LOAD_BALANCE=off)(ADDRESS=(PROTOCOL=TCP)(HOST=lbrezinai05)(PORT=25881))(ADDRESS=(PROTOCOL=TCP)(HOST=lbrezinai06)(PORT=25881))(CONNECT_DATA=(SERVICE_NAME=actest.MERCK)))"
       user="ONSTEST"
       password="onstest"
       initial-pool-size="10"
