@@ -3,10 +3,8 @@
 
 package sandbox.ucp;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,6 +19,8 @@ import java.sql.ResultSet;
 import oracle.jdbc.OracleDriver;
 
 import java.lang.Thread;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /***************
  * 
@@ -38,9 +38,23 @@ import java.lang.Thread;
 public class UCPTest {
 
 	public static Properties loadProperties() {
+		String location = BinaryPath.getLocation(UCPTest.class);
+		Path path = Paths.get(location, "database.properties");
 		Properties props = new Properties();
+		InputStream is;
+		if(Files.exists(path)) {
+			System.out.println("Loading external properties:" + path.toString());
+            try {
+				is = new FileInputStream(new File(path.toString()));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+			System.out.println("Loading internal properties");
+			is = UCPTest.class.getResourceAsStream("/database.properties");
+		}
+
 		try {
-			InputStream is = UCPTest.class.getResourceAsStream("/database.properties");
 			if (is != null) {
 				props.load(is);
 				is.close();
@@ -66,11 +80,11 @@ public class UCPTest {
 			message = args[0];
 		}
 
-		String location = BinaryPath.getLocation(UCPTest.class);
-		System.out.println("Location: " + location);
+		String propertyLocation = BinaryPath.getLocation(UCPTest.class);
+		System.out.println("Location: " + propertyLocation);
 
 		// Set the variable with the absolute path
-		String absolutePath = new File(location).getAbsolutePath();
+		String absolutePath = new File(propertyLocation).getAbsolutePath();
 		System.out.println("Absolute Path: " + absolutePath);
 
 		PoolDataSource  pds = PoolDataSourceFactory.getPoolDataSource();
@@ -82,10 +96,10 @@ public class UCPTest {
 		System.out.println("\tDebug: " + String.valueOf(OracleDriver.isDebug()));
 		System.out.println("connection factory set");
 
-		System.out.println(new java.io.File( "." ).getCanonicalPath());
-		Properties props = loadProperties();			
+		System.out.println("PWD: " + new java.io.File( "." ).getCanonicalPath());
+		Properties props = UCPTest.loadProperties();
 
-		System.out.println("Using URL\n" + props.getProperty("url"));
+		System.out.println("Using URL: " + props.getProperty("url"));
 		pds.setURL(props.getProperty("url"));
 		pds.setUser(props.getProperty("username"));
 		pds.setPassword(props.getProperty("password"));
