@@ -49,8 +49,8 @@ public class AppHibernate
 		String location = BinaryPath.getLocation(AppJPA.class);
 		Path path = Paths.get(location, "ucp.xml");
 		if(Files.exists(path)) {
-			System.out.println("Loading external properties:" + path.toString());
-			System.setProperty("oracle.ucp.jdbc.xmlConfigFile", path.toString());
+			System.out.println("Loading external properties:" + path.normalize().toUri().toString());
+			System.setProperty("oracle.ucp.jdbc.xmlConfigFile", path.normalize().toUri().toString());
 		} else{
 			System.out.println("Loading internal properties:" + ucpConfigURI);
 			System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
