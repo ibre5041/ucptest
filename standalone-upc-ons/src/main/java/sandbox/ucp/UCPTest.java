@@ -157,7 +157,7 @@ public class UCPTest {
 		System.out.println(((oracle.ucp.jdbc.oracle.OracleJDBCConnectionPoolStatistics)pds.getStatistics()).getFCFProcessingInfo());
 
 		System.out.println("Sleeping");
-		Thread.sleep(10000);
+		Thread.sleep(1000000);
 		
 		cstmt.close();
 		conn.close();
