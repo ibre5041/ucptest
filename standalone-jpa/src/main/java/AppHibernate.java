@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -39,11 +42,19 @@ public class AppHibernate
 	
     public static void main( String[] args ) throws Exception
     {
-	//Override system DNS setting
-	////System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
-	////System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
-    	
-    	System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
+		//Override system DNS setting
+		//System.setProperty("sun.net.spi.nameservice.nameservers", "192.168.8.200");
+		//System.setProperty("sun.net.spi.nameservice.provider.1", "dns,sun");
+
+		String location = BinaryPath.getLocation(AppJPA.class);
+		Path path = Paths.get(location, "ucp.xml");
+		if(Files.exists(path)) {
+			System.out.println("Loading external properties:" + path.toString());
+			System.setProperty("oracle.ucp.jdbc.xmlConfigFile", path.toString());
+		} else{
+			System.out.println("Loading internal properties:" + ucpConfigURI);
+			System.setProperty("oracle.ucp.jdbc.xmlConfigFile", ucpConfigURI);
+		}
     	
     	Logger.getLogger("oracle.ucp").setLevel(Level.FINEST);
     	Logger.getLogger("oracle.ucp.jdbc.PoolDataSource").setLevel(Level.FINEST);
