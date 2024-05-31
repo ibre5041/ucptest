@@ -3,6 +3,7 @@
 
 package sandbox.ucp;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,6 +65,13 @@ public class UCPTest {
 		} else {
 			message = args[0];
 		}
+
+		String location = BinaryPath.getLocation(UCPTest.class);
+		System.out.println("Location: " + location);
+
+		// Set the variable with the absolute path
+		String absolutePath = new File(location).getAbsolutePath();
+		System.out.println("Absolute Path: " + absolutePath);
 
 		PoolDataSource  pds = PoolDataSourceFactory.getPoolDataSource();
 		pds.setConnectionFactoryClassName("oracle.jdbc.replay.OracleDataSourceImpl");
