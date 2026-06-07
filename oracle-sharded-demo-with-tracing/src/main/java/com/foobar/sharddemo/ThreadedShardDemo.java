@@ -8,14 +8,38 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ShardingKey;
+import java.sql.Statement;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
-public class MinimalShardDemo {
+public class ThreadedShardDemo {
+
+    private static final int THREAD_COUNT = 10;
+    private static final int ITERATIONS_PER_THREAD = 100;
+
+    private static final List<String> SHARDING_KEYS = List.of(
+            "Denmark",
+            "France",
+            "Germany",
+            "Poland",
+            "Spain",
+            "United Kingdom",
+            "India",
+            "Australia",
+            "Japan",
+            "New Zealand",
+            "Saudi Arabia",
+            "Singapore",
+            "Turkey"
+    );
 
     public static void main(String[] args) throws Exception {
         OracleTracing.enable();
@@ -24,14 +48,9 @@ public class MinimalShardDemo {
         String user = requiredEnv("DB_USER");
         String password = requiredEnv("DB_PASSWORD");
 
-        List<String> shardKeys = parseKeys(args, System.getenv("SHARDING_KEYS"));
-        if (shardKeys.isEmpty()) {
-            shardKeys = List.of("Singapore");
-        }
-
         PoolDataSource pds = PoolDataSourceFactory.getPoolDataSource();
-        pds.setConnectionPoolName("ShardDemoPool");
-        pds.setDataSourceName("shardDemoDataSource");
+        pds.setConnectionPoolName("ThreadedShardDemoPool");
+        pds.setDataSourceName("threadedShardDemoDataSource");
         pds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
         pds.setURL(url);
         pds.setUser(user);
@@ -43,19 +62,47 @@ public class MinimalShardDemo {
         pds.setConnectionWaitDuration(Duration.ofSeconds(30));
         pds.setValidateConnectionOnBorrow(true);
 
-        System.out.println("UCP/JDBC tracing enabled.");
         System.out.println("URL        = " + url);
         System.out.println("User       = " + user);
-        System.out.println("ShardingKeys = " + shardKeys);
+        System.out.println("Threads    = " + THREAD_COUNT);
+        System.out.println("Iterations = " + ITERATIONS_PER_THREAD);
+        System.out.println("ShardingKeys = " + SHARDING_KEYS);
 
-        for (String key : shardKeys) {
-            System.out.println();
-            System.out.println("=== CONNECT USING SHARDING_KEY=" + key + " ===");
-            executeForKey(pds, key);
+        runWorkers(pds);
+    }
+
+    private static void runWorkers(PoolDataSource pds) throws InterruptedException, ExecutionException {
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
+        try {
+            List<Future<?>> futures = new ArrayList<>(THREAD_COUNT);
+            for (int workerId = 1; workerId <= THREAD_COUNT; workerId++) {
+                int currentWorkerId = workerId;
+                futures.add(executor.submit(() -> runWorker(pds, currentWorkerId)));
+            }
+
+            for (Future<?> future : futures) {
+                future.get();
+            }
+        } finally {
+            executor.shutdown();
+            if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
         }
     }
 
-    private static void executeForKey(PoolDataSource pds, String shardKeyValue) {
+    private static void runWorker(PoolDataSource pds, int workerId) {
+        for (int iteration = 1; iteration <= ITERATIONS_PER_THREAD; iteration++) {
+            String shardKey = randomShardKey();
+            executeForKey(pds, workerId, iteration, shardKey);
+        }
+    }
+
+    private static String randomShardKey() {
+        return SHARDING_KEYS.get(ThreadLocalRandom.current().nextInt(SHARDING_KEYS.size()));
+    }
+
+    private static void executeForKey(PoolDataSource pds, int workerId, int iteration, String shardKeyValue) {
         try {
             ShardingKey shardKey = new OracleShardingKeyBuilderImpl()
                     .subkey(shardKeyValue, OracleType.VARCHAR2)
@@ -71,7 +118,10 @@ public class MinimalShardDemo {
 
                 while (rs.next()) {
                     System.out.printf(
-                            "host_name=%s db_unique_name=%s role=%s service_name=%s con_name=%s%n",
+                            "worker=%02d iteration=%03d sharding_key=%s host_name=%s db_unique_name=%s role=%s service_name=%s con_name=%s%n",
+                            workerId,
+                            iteration,
+                            shardKeyValue,
                             rs.getString("host_name"),
                             rs.getString("db_unique_name"),
                             rs.getString("database_role"),
@@ -81,7 +131,12 @@ public class MinimalShardDemo {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Connection failed for sharding key: " + shardKeyValue);
+            System.err.printf(
+                    "Connection failed for worker=%02d iteration=%03d sharding_key=%s%n",
+                    workerId,
+                    iteration,
+                    shardKeyValue
+            );
             logThrowable(e);
             throw new RuntimeException(e);
         }
@@ -111,23 +166,5 @@ public class MinimalShardDemo {
             throw new IllegalArgumentException("Missing required environment variable: " + name);
         }
         return value.trim();
-    }
-
-    private static List<String> parseKeys(String[] args, String envValue) {
-        List<String> keys = new ArrayList<>();
-        if (envValue != null && !envValue.isBlank()) {
-            keys.addAll(Arrays.stream(envValue.split(","))
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .toList());
-        }
-        if (args != null && args.length > 0) {
-            keys.clear();
-            keys.addAll(Arrays.stream(args)
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .toList());
-        }
-        return keys;
     }
 }

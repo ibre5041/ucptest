@@ -1,0 +1,4 @@
+DB_URL='jdbc:oracle:thin:@//gsm-emea.prod.vmware.haf:1521/rw_service.orasdb.oradbcloud'
+DB_USER='app_schema'
+DB_PASSWORD='AcrorA123456__'
+SHARDING_KEYS='Singapore,Spain'
